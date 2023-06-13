@@ -64,4 +64,8 @@ public class Product {
                 ", quantity=" + quantity +
                 '}';
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

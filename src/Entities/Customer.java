@@ -9,35 +9,17 @@ public class Customer {
     private String name;
     private LocalDate birthDate;
     private String document;
-    private String email;
-    private String password;
 
-    public Customer(String name, LocalDate birthDate, String document, String email, String password) {
+
+    public Customer(String name, LocalDate birthDate, String document) {
         this.name = name;
         this.birthDate = birthDate;
         this.document = document;
-        this.email = email;
-        this.password = password;
+
     }
 
     public Integer getId() {
         return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -67,7 +49,8 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                " name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", birthDate=" + birthDate +
                 ", document='" + document + '\'' +
                 '}';
@@ -83,5 +66,9 @@ public class Customer {
     @Override
     public int hashCode() {
         return Objects.hash(getDocument());
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
