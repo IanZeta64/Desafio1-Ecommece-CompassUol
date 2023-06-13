@@ -8,13 +8,13 @@ public class Order {
     private Integer id;
     private Set<OrderLine> orderLineList;
     private Payment payment;
-    private Integer customerId;
+    private Customer customer;
     private Instant createdOn;
 
-    public Order(Set<OrderLine> orderLineList, Payment payment, Integer customerId, Instant createdOn) {
+    public Order(Set<OrderLine> orderLineList, Payment payment, Customer customer, Instant createdOn) {
         this.orderLineList = orderLineList;
         this.payment = payment;
-        this.customerId = customerId;
+        this.customer = customer;
         this.createdOn = createdOn;
     }
 
@@ -30,8 +30,8 @@ public class Order {
         return payment;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public Customer getCustomerId() {
+        return customer;
     }
 
     public Instant getCreatedOn() {
