@@ -8,17 +8,45 @@ public class OrderLine {
     private Product product;
     private Integer quantity;
     private BigDecimal finalPrice;
+    private Integer customerId;
     private Boolean ordered;
 
-    public OrderLine(Product product, Integer quantity) {
+    public OrderLine(Product product, Integer quantity, Integer customerId) {
         this.product = product;
         this.quantity = quantity;
+        this.customerId = customerId;
         this.finalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
+        this.ordered = false;
+    }
+
+    public OrderLine(Product product, Integer quantity, BigDecimal finalPrice, Integer customerId, Boolean ordered) {
+        this.product = product;
+        this.quantity = quantity;
+        this.finalPrice = finalPrice;
+        this.customerId = customerId;
+        this.ordered = ordered;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public Boolean getOrdered() {
         return ordered;
     }
+
 
     public void setOrdered(Boolean ordered) {
         this.ordered = ordered;
@@ -52,9 +80,12 @@ public class OrderLine {
     @Override
     public String toString() {
         return "OrderLine{" +
-                " product=" + product +
+                "id=" + id +
+                ", product=" + product.getName() +
                 ", quantity=" + quantity +
                 ", finalPrice=" + finalPrice +
+                ", customerId=" + customerId +
+                ", ordered=" + ordered +
                 '}';
     }
 }
