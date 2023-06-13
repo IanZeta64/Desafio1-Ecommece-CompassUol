@@ -1,13 +1,9 @@
 package repositories.impl;
-
-import Entities.Customer;
 import Entities.Product;
 import config.DatabaseConfig;
 import repositories.ProductRepository;
-
 import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +21,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_insert, Statement.RETURN_GENERATED_KEYS)){
             setProduct(product, statement);
-
             affectedRowsVerify(statement, "Failed to save customer, no rows affected.");
             ResultSet generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -41,12 +36,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         return product;
     }
 
-    private static void affectedRowsVerify(PreparedStatement statement,String message) throws SQLException {
-        int affectedRows = statement.executeUpdate();
-        if (affectedRows <= 0) {
-            throw new SQLException(message);
-        }
-    }
 
 
     @Override
@@ -130,6 +119,14 @@ public class ProductRepositoryImpl implements ProductRepository {
         statement.setString(2, product.getCategory());
         statement.setBigDecimal(3, product.getPrice());
         statement.setInt(4, product.getQuantity());
+    }
+
+
+    private static void affectedRowsVerify(PreparedStatement statement,String message) throws SQLException {
+        int affectedRows = statement.executeUpdate();
+        if (affectedRows <= 0) {
+            throw new SQLException(message);
+        }
     }
 
 }
