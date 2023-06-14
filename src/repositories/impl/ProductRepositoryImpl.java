@@ -16,7 +16,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         this.databaseConfig = databaseConfig;
     }
     @Override
-    public Product save(Product product) {
+    public Product insert(Product product) {
         String sql_insert = "INSERT INTO products (name, category, price, quantity) VALUES (?, ?, ?, ?)";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_insert, Statement.RETURN_GENERATED_KEYS)){
@@ -39,7 +39,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> selectAll() {
         List<Product> products = new ArrayList<>();
         String sql_selectAll = "SELECT * FROM products";
         try (Connection connection = databaseConfig.getConnection();
@@ -58,7 +58,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
 
     @Override
-    public Optional<Product> getById(Integer id) {
+    public Optional<Product> selectById(Integer id) {
         String sql_selectById = "SELECT * FROM products WHERE id = ?";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_selectById)) {
