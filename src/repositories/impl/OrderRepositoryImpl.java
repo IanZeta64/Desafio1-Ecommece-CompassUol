@@ -36,12 +36,20 @@ public class OrderRepositoryImpl implements OrderRepository {
             } else {
                 throw new SQLException("Failed to save order, no ID obtained.");
             }
-            System.out.println();
+
             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE order_lines SET order_id = ?," +
                     " ordered = true WHERE customer_id = ? AND ordered = false")) {
                 updateStatement.setInt(1, generatedId);
                 updateStatement.setInt(2, order.getCustomerId());
                 updateStatement.executeUpdate();
+            }
+            try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE products SET quantity = quantity - ?" +
+                    " WHERE id = ? ")) {
+                for (OrderLine orderline: order.getOrderLineList()) {
+                updateStatement.setInt(1, orderline.getQuantity());
+                updateStatement.setInt(2, orderline.getProduct().getId());
+                updateStatement.executeUpdate();
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
