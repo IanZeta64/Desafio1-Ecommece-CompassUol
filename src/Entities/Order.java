@@ -10,14 +10,14 @@ import java.util.Set;
 public class Order {
 
     private Integer id;
-    private List<OrderLine> orderLineList;
+    private Set<OrderLine> orderLineList;
     private Payment payment;
     private Integer customerId;
     private Instant createdOn;
 
     private BigDecimal finalPrice;
 
-    public Order(Integer id, List<OrderLine> orderLineList, Payment payment, Integer customerId, Instant createdOn, BigDecimal finalPrice) {
+    public Order(Integer id, Set<OrderLine> orderLineList, Payment payment, Integer customerId, Instant createdOn, BigDecimal finalPrice) {
         this.id = id;
         this.orderLineList = orderLineList;
         this.payment = payment;
@@ -26,11 +26,15 @@ public class Order {
         this.finalPrice = finalPrice;
     }
 
-    public Order(List<OrderLine> orderLineList, Payment payment, Integer customerId) {
+    public Order(Set<OrderLine> orderLineList, Payment payment, Integer customerId) {
         this.orderLineList = orderLineList;
         this.payment = payment;
         this.customerId = customerId;
         this.createdOn = Instant.now();
+        this.finalPrice = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void setFinalPrice() {
         this.finalPrice = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -42,8 +46,8 @@ public class Order {
         return id;
     }
 
-    public List<OrderLine> getOrderLineList() {
-        return Collections.unmodifiableList(orderLineList);
+    public Set<OrderLine> getOrderLineList() {
+        return Collections.unmodifiableSet(orderLineList);
     }
 
     public Payment getPayment() {
@@ -72,5 +76,17 @@ public class Order {
                 ", createdOn=" + createdOn +
                 ", finalPrice=" + finalPrice +
                 '}';
+    }
+    public void setOrderLineList(Set<OrderLine> orderLineList) {
+        this.orderLineList = orderLineList;
+        setFinalPrice();
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 }
