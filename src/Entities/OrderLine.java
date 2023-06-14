@@ -19,7 +19,8 @@ public class OrderLine {
         this.ordered = false;
     }
 
-    public OrderLine(Product product, Integer quantity, BigDecimal finalPrice, Integer customerId, Boolean ordered) {
+    public OrderLine(Integer id, Product product, Integer quantity, BigDecimal finalPrice, Integer customerId, Boolean ordered) {
+        this.id = id;
         this.product = product;
         this.quantity = quantity;
         this.finalPrice = finalPrice;

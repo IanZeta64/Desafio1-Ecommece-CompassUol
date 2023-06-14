@@ -18,7 +18,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Customer save(Customer customer) {
+    public Customer insert(Customer customer) {
         String sql_insert = "INSERT INTO customers (name, birth_date, document) VALUES (?, ?, ?)";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_insert, Statement.RETURN_GENERATED_KEYS)){
@@ -39,7 +39,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public List<Customer> findAll() {
+    public List<Customer> selectAll() {
         List<Customer> customers = new ArrayList<>();
         String sql_selectAll = "SELECT * FROM customers";
         try (Connection connection = databaseConfig.getConnection();
@@ -59,7 +59,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
 
     @Override
-    public Optional<Customer> getById(Integer id) {
+    public Optional<Customer> selectById(Integer id) {
         String sql_selectById = "SELECT * FROM customers WHERE id = ?";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_selectById)) {
