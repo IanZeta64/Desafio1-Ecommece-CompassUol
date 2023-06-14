@@ -1,6 +1,7 @@
 package Entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class OrderLine {
 
@@ -88,5 +89,17 @@ public class OrderLine {
                 ", customerId=" + customerId +
                 ", ordered=" + ordered +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderLine orderLine)) return false;
+        return getProduct().equals(orderLine.getProduct()) && getQuantity().equals(orderLine.getQuantity()) && getFinalPrice().equals(orderLine.getFinalPrice()) && getCustomerId().equals(orderLine.getCustomerId()) && getOrdered().equals(orderLine.getOrdered());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getProduct(), getQuantity(), getFinalPrice(), getCustomerId(), getOrdered());
     }
 }
