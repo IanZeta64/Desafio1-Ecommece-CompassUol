@@ -2,6 +2,7 @@ package Entities;
 
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Product {
 
@@ -54,6 +55,10 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -65,7 +70,15 @@ public class Product {
                 '}';
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product product)) return false;
+        return getName().equals(product.getName()) && getCategory().equals(product.getCategory());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getCategory());
     }
 }
