@@ -9,11 +9,8 @@ import repositories.ProductRepository;
 import repositories.impl.OrderLineRepositoryImpl;
 import repositories.impl.OrderRepositoryImpl;
 import repositories.impl.ProductRepositoryImpl;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MainTestesOrder {
@@ -58,6 +55,10 @@ orderLineList.add(orderLine2);
 ////        order.setOrderLineList();
 ////        repository.update(order)
 //        System.out.println(repository.update(order)+"\n");
-        System.out.println(repository.selectById(18));
+//        System.out.println(repository.selectById(18));
+        repository.deleteById(18);
+        System.out.println();
+        repository.selectAll().forEach(System.out::println);
+
     }
 }
