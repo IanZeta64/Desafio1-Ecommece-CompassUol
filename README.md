@@ -1,4 +1,4 @@
-Acompanhe o andamento do projeto nesse link -> https://trello.com/invite/b/DeG0nY6c/ATTI50826877791b485ae0fd595152fba80450D52FCD/projeto-ecommerce-compass-uol
+Follow the progress of the project at this link -> https://trello.com/invite/b/DeG0nY6c/ATTI50826877791b485ae0fd595152fba80450D52FCD/projeto-ecommerce-compass-uol
 
 
 
