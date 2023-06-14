@@ -1,4 +1,5 @@
-Acompanhe o andamento do projeto nesse link -> https://github.com/users/IanZeta64/projects/1
+Acompanhe o andamento do projeto nesse link -> https://trello.com/invite/b/DeG0nY6c/ATTI50826877791b485ae0fd595152fba80450D52FCD/projeto-ecommerce-compass-uol
+
 
 
 # DESAFIO 1
