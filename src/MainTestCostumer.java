@@ -11,7 +11,7 @@ public class MainTestCostumer {
 
         Customer customer = new Customer("Agnes", LocalDate.of(1999,12,15), "987654321");
 
-//        System.out.println(repository.save(customer));
+        System.out.println(repository.insert(customer));
 //        var customer1 = repository.getById(1);
         var listCustomer = repository.selectAll();
         listCustomer.forEach(System.out::println);
@@ -20,9 +20,9 @@ public class MainTestCostumer {
 //        customer2.setId(7);
 //        System.out.println(repository.update(customer2));
 
-        repository.deleteById(9);
-        var list = repository.selectAll();
-        System.out.println(list);
+//        repository.deleteById(9);
+//        var list = repository.selectAll();
+//        System.out.println(list);
 
     }
 }

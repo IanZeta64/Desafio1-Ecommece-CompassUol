@@ -13,11 +13,12 @@ public class MainTestesOrderLine {
         product.setId(4);
         OrderLine orderLine = new OrderLine(product, 2, 1);
 
-        System.out.println(repository.insert(orderLine));
+//        System.out.println(repository.insert(orderLine));
 //        repository.selectAll().forEach(System.out::println);
 //        orderLine.setQuantity(3);
 //        System.out.println(repository.update(orderLine));
 //        repository.deleteById(4);
-        repository.selectAll().forEach(System.out::println);
+        System.out.println(repository.selectAll());
+
     }
 }

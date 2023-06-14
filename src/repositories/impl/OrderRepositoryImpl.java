@@ -37,7 +37,8 @@ public class OrderRepositoryImpl implements OrderRepository {
                 throw new SQLException("Failed to save order, no ID obtained.");
             }
             System.out.println();
-            try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE order_lines SET order_id = ?, ordered = true WHERE customer_id = ? AND ordered = false")) {
+            try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE order_lines SET order_id = ?," +
+                    " ordered = true WHERE customer_id = ? AND ordered = false")) {
                 updateStatement.setInt(1, generatedId);
                 updateStatement.setInt(2, order.getCustomerId());
                 updateStatement.executeUpdate();
@@ -47,10 +48,11 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
         return order;
     }
-
     @Override
     public List<Order> selectAll() {
         List<Order> orders = new ArrayList<>();
+        Map<Integer, Order> orderMap = new HashMap<>();
+        Map<Integer, Set<OrderLine>> orderLineListMap = new HashMap<>();
         String sql_selectAll = "SELECT o.id AS order_id, o.payment, o.customer_id, o.created_on, o.final_price, " +
                 "ol.id AS order_line_id, ol.product_id, ol.quantity, ol.final_price AS orderline_price, ol.ordered, " +
                 "p.id AS product_id, p.name AS product_name, p.category AS product_category, p.price AS product_price, p.quantity AS product_quantity " +
@@ -58,13 +60,122 @@ public class OrderRepositoryImpl implements OrderRepository {
                 "JOIN order_lines ol ON o.id = ol.order_id " +
                 "JOIN products p ON ol.product_id = p.id" ;
         try (Connection connection = databaseConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql_selectAll)) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                Map<Integer, Order> orderMap = new HashMap<>();
-                List<OrderLine> orderLineList = new ArrayList<>();
-                Queue<List<OrderLine>> queueOrderLineList = new LinkedList<>();
+             PreparedStatement statement = connection.prepareStatement(sql_selectAll); ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Order order = getOrder(resultSet);
+                int orderId = order.getId();
+
+                if (orderMap.containsKey(orderId)) {
+                    Set<OrderLine> existingOrderLineList = orderLineListMap.get(orderId);
+                    Set<OrderLine> updatedOrderLineList = new HashSet<>(existingOrderLineList);
+                    updatedOrderLineList.addAll(order.getOrderLineList());
+                    orderLineListMap.put(orderId, updatedOrderLineList);
+                } else {
+                    orderMap.put(orderId, order);
+                    orderLineListMap.put(orderId, new HashSet<>(order.getOrderLineList()));
+                }
+            }
+            orders = orderMap.entrySet().stream().map( entryMap -> {
+                 entryMap.getValue().setOrderLineList(orderLineListMap.get(entryMap.getKey()));
+                 return entryMap.getValue();
+            }).toList();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Trate a exceção adequadamente
+        }
+
+        return orders;
+    }
+
+    @Override
+    public Optional<Order> selectById(Integer id) {
+        Map<Integer, Order> orderMap = new HashMap<>();
+        Map<Integer, Set<OrderLine>> orderLineListMap = new HashMap<>();
+        String sql_selectById =  "SELECT o.id AS order_id, o.payment, o.customer_id, o.created_on, o.final_price, " +
+                "ol.id AS order_line_id, ol.product_id, ol.quantity, ol.final_price AS orderline_price, ol.ordered, " +
+                "p.id AS product_id, p.name AS product_name, p.category AS product_category, p.price AS product_price, p.quantity AS product_quantity " +
+                "FROM orders o " +
+                "JOIN order_lines ol ON o.id = ol.order_id " +
+                "JOIN products p ON ol.product_id = p.id " +
+                "WHERE o.id = ?";
+
+        try (Connection connection = databaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql_selectById)) {
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
-                    int orderId = resultSet.getInt("order_id");
+                    Order order = getOrder(resultSet);
+                    int orderId = order.getId();
+
+                    if (orderMap.containsKey(orderId)) {
+                        Set<OrderLine> existingOrderLineList = orderLineListMap.get(orderId);
+                        Set<OrderLine> updatedOrderLineList = new HashSet<>(existingOrderLineList);
+                        updatedOrderLineList.addAll(order.getOrderLineList());
+                        orderLineListMap.put(orderId, updatedOrderLineList);
+                    } else {
+                        orderMap.put(orderId, order);
+                        orderLineListMap.put(orderId, new HashSet<>(order.getOrderLineList()));
+                    }
+                }
+                resultSet.close();
+                return orderMap.entrySet().stream().map( entryMap -> {
+                    entryMap.getValue().setOrderLineList(orderLineListMap.get(entryMap.getKey()));
+                    return entryMap.getValue();
+                }).findFirst();
+
+        } catch (SQLException e) {
+            e.printStackTrace();// TRATAR EXCESSAO
+        }
+        return Optional.empty();
+    }
+
+
+    @Override
+    public Order update(Order order) {
+        String sql_update = "UPDATE orders SET payment = ?, customer_id = ?, created_on = ?, final_price = ? WHERE id = ?";
+        try (Connection connection = databaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql_update)) {
+            setOrder(order, statement);
+            statement.setInt(5, order.getId());
+            affectedRowsVerify(statement, "Failed to update order line, no rows affected.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return order;
+
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        String sql_delete =  "DELETE FROM orders WHERE id = ?";
+        try (Connection connection = databaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql_delete)) {
+            statement.setInt(1, id);
+            affectedRowsVerify(statement, "Failed to remove order, no rows affected.");
+        } catch (SQLException e) {
+            e.printStackTrace();/// TRATAR EXCEÇÃO
+        }
+    }
+
+
+    private void affectedRowsVerify(PreparedStatement statement, String message) throws SQLException {
+        int affectedRows = statement.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException(message);
+        }
+    }
+    private  void setOrder(Order order, PreparedStatement statement) throws SQLException {
+        statement.setString(1, order.getPayment().toString());
+        statement.setInt(2, order.getCustomerId());
+        statement.setTimestamp(3, Timestamp.from(order.getCreatedOn()));
+        statement.setBigDecimal(4, order.getFinalPrice());
+    }
+
+    private Order getOrder(ResultSet resultSet) throws SQLException {
+       int orderId = resultSet.getInt("order_id");
                     int orderLineId = resultSet.getInt("order_line_id");
                     int productId = resultSet.getInt("product_id");
 
@@ -86,72 +197,10 @@ public class OrderRepositoryImpl implements OrderRepository {
                     Payment payment = Payment.valueOf(resultSet.getString("payment"));
                     Instant createdOn = resultSet.getTimestamp("created_on").toInstant();
                     BigDecimal orderFinalPrice = resultSet.getBigDecimal("final_price");
-                    Order order = new Order(orderId, List.of(orderLine), payment, customerId, createdOn, orderFinalPrice);
+                    Order order = new Order(orderId, Set.of(orderLine), payment, customerId, createdOn, orderFinalPrice);
 
-                    if (orderMap.containsKey(orderId)) {
-                        orderLineList.addAll(order.getOrderLineList());
-                    } else {
-                        queueOrderLineList.add(orderLineList);
-                       orderLineList.clear();
-                        orderMap.put(orderId, order);
-                    }
-                }
-               orders = orderMap.values().stream().map(order -> new Order(order.getId(), queueOrderLineList.poll(), order.getPayment(), order.getCustomerId(), order.getCreatedOn(), order.getFinalPrice())).toList();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(); // Trate a exceção adequadamente
-        }
-
-        return orders;
+//        System.out.println(order);
+        return  order;
     }
-
-    @Override
-    public Optional<Order> selectById(Integer id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Order update(Order order) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-
-    }
-
-
-    private void affectedRowsVerify(PreparedStatement statement, String message) throws SQLException {
-        int affectedRows = statement.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException(message);
-        }
-    }
-    private  void setOrder(Order order, PreparedStatement statement) throws SQLException {
-        statement.setString(1, order.getPayment().toString());
-        statement.setInt(2, order.getCustomerId());
-        statement.setTimestamp(3, Timestamp.from(order.getCreatedOn()));
-        statement.setBigDecimal(4, order.getFinalPrice());
-    }
-
-//    private OrderLine getOrder(ResultSet resultSet) throws SQLException {
-//        int id = resultSet.getInt("id");
-//        int productId = resultSet.getInt("product_id");
-//        String productName = resultSet.getString("product_name");
-//        String productCategory = resultSet.getString("product_category");
-//        BigDecimal productPrice = resultSet.getBigDecimal("product_price");
-//        int productQuantity = resultSet.getInt("product_quantity");
-//        int quantity = resultSet.getInt("quantity");
-//        BigDecimal finalPrice = resultSet.getBigDecimal("final_price");
-//        int customerId = resultSet.getInt("customer_id");
-//        boolean ordered = resultSet.getBoolean("ordered");
-//
-//        Product product = new Product(productName, productCategory, productPrice, productQuantity);
-//        product.setId(productId);
-//        OrderLine orderLine = new OrderLine(id, product, quantity, finalPrice, customerId, ordered);
-//        orderLine.setId(id);
-//        return orderLine;
-//    }
 }
 

@@ -46,8 +46,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
         String sql_selectAll = "SELECT ol.id, p.id AS product_id, p.name AS product_name, p.category AS Product_category," +
                 " p.price AS product_price, p.quantity AS product_quantity, ol.quantity, ol.final_price, ol.customer_id, ol.ordered " +
                 "FROM order_lines ol " +
-                "JOIN products p ON ol.product_id = p.id " +
-                "WHERE ol.ordered = false";
+                "JOIN products p ON ol.product_id = p.id ";
         try (Connection connection = databaseConfig.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql_selectAll)) {
@@ -62,9 +61,10 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
     }
 
 
+
     @Override
     public Optional<OrderLine> selectById(Integer id) {
-        String sql_selectById = "SELECT * FROM order_lines WHERE id = ? AND ordered = false";
+        String sql_selectById = "SELECT * FROM order_lines WHERE id = ? ";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_selectById)) {
             statement.setInt(1, id);
@@ -82,7 +82,8 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
 
     @Override
     public OrderLine update(OrderLine orderLine) {
-        String sql_update = "UPDATE order_lines SET product_id = ?, quantity = ?, final_price = ?, customer_id = ?" +", ordered = ? " + "WHERE id = ?";
+        String sql_update = "UPDATE order_lines SET product_id = ?, quantity = ?, final_price = ?, customer_id = ?," +
+                " ordered = ? WHERE id = ?";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_update)) {
             setOrderLine(orderLine, statement);
@@ -96,10 +97,11 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
 
     @Override
     public void deleteById(Integer id) {
+        String sql_delete =  "DELETE FROM order_lines WHERE id = ?";
     try (Connection connection = databaseConfig.getConnection();
-    PreparedStatement statement = connection.prepareStatement("DELETE FROM order_lines WHERE id = ?")) {
+    PreparedStatement statement = connection.prepareStatement(sql_delete)) {
         statement.setInt(1, id);
-        affectedRowsVerify(statement, "Failed to remove  , no rows affected.");
+        affectedRowsVerify(statement, "Failed to remove order line, no rows affected.");
     } catch (SQLException e) {
         e.printStackTrace();/// TRATAR EXCEÇÃO
     }
