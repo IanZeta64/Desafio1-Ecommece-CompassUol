@@ -2,9 +2,7 @@ package Services.impl;
 
 import Entities.OrderLine;
 import Services.OrderLineService;
-import exceptions.CustomerNotFoundException;
-import exceptions.DuplicatedCustomerException;
-import exceptions.OrderLineNotFoundException;
+import exceptions.*;
 import repositories.OrderLineRepository;
 
 import java.util.List;
@@ -20,7 +18,7 @@ public class OrderLineServiceImpl implements OrderLineService {
     @Override
     public OrderLine save(OrderLine orderLine) {
         if (orderLineRepository.selectAll().stream().anyMatch(ordLn -> ordLn.equals(orderLine))) {
-            throw new DuplicatedCustomerException("Order line already registered");
+            throw new DuplicatedOrderLineException("Order line already registered");
         } else {
             return orderLineRepository.insert(orderLine);
         }
@@ -41,7 +39,7 @@ public class OrderLineServiceImpl implements OrderLineService {
         if (existById(orderLine.getId())){
             return orderLineRepository.update(orderLine);
         } else{
-            throw new CustomerNotFoundException("Customer not found,can't update.");
+            throw new OrderLineNotFoundException("Order line not found,can't update.");
         }
     }
 
@@ -50,7 +48,7 @@ public class OrderLineServiceImpl implements OrderLineService {
         if (existById(id)){
             orderLineRepository.deleteById(id);
         }else{
-            throw new CustomerNotFoundException("Customer not found,can't delete.");
+            throw new OrderLineNotFoundException("Order not found,can't delete.");
         }
     }
 
@@ -60,4 +58,15 @@ public class OrderLineServiceImpl implements OrderLineService {
         return cont > 0;
     }
 
+
+    @Override
+    public Boolean existByProductId(Integer productId){
+        return orderLineRepository.selectAll().stream().anyMatch( orderLine ->  orderLine.getProduct().getId().equals(productId));
+    }
+
+    @Override
+    public OrderLine findByProductId(Integer productId) {
+        return orderLineRepository.selectAll().stream().filter(product -> product.getProduct().getId().equals(productId))
+                .findFirst().orElseThrow(() -> new OrderLineNotFoundException(String.format("Order line not found by product_id: %s", productId)));
+    }
 }

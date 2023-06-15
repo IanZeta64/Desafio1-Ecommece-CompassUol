@@ -3,6 +3,7 @@ import Entities.Order;
 import Entities.OrderLine;
 import Enums.Payment;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CartService {
@@ -13,5 +14,7 @@ public interface CartService {
     void removeProduct(Integer productId);
     void clearCart();
     Order placeOrder(Payment payment);
+
+    List<Order> getAllOrders();
 
 }
