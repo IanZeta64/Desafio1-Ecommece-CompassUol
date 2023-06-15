@@ -48,7 +48,7 @@ public class OrderLineServiceImpl implements OrderLineService {
         if (existById(id)){
             orderLineRepository.deleteById(id);
         }else{
-            throw new OrderLineNotFoundException("Order not found,can't delete.");
+            throw new OrderLineNotFoundException("Order line not found,can't delete.");
         }
     }
 
@@ -60,8 +60,8 @@ public class OrderLineServiceImpl implements OrderLineService {
 
 
     @Override
-    public Boolean existByProductId(Integer productId){
-        return orderLineRepository.selectAll().stream().anyMatch( orderLine ->  orderLine.getProduct().getId().equals(productId));
+    public Boolean existByProductIdAndNotOrdered(Integer productId){
+        return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getOrdered().equals(false)).anyMatch( orderLine ->  orderLine.getProduct().getId().equals(productId));
     }
 
     @Override

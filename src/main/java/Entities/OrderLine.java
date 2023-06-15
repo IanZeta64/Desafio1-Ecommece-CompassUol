@@ -83,7 +83,7 @@ public class OrderLine {
     public String toString() {
         return "OrderLine{" +
                 "id=" + id +
-                ", product=" + product.getName() +
+                ", product=" + product.getName() + " [id:" + product.getId()+"]" +
                 ", quantity=" + quantity +
                 ", finalPrice=" + finalPrice +
                 ", customerId=" + customerId +

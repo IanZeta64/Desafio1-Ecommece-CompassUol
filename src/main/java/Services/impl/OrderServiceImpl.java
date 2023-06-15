@@ -2,9 +2,7 @@ package Services.impl;
 
 import Entities.Order;
 import Services.OrderService;
-import exceptions.CustomerNotFoundException;
-import exceptions.DUplicatedOrderException;
-import exceptions.DuplicatedCustomerException;
+import exceptions.DuplicatedOrderException;
 import exceptions.OrderNotFoundException;
 import repositories.OrderRepository;
 
@@ -21,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order save(Order order) {
         if (orderRepository.selectAll().stream().anyMatch(odr -> odr.equals(order))) {
-            throw new DUplicatedOrderException("Order already registered");
+            throw new DuplicatedOrderException("Order already registered");
         } else {
             return orderRepository.insert(order);
         }

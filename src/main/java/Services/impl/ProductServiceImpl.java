@@ -2,8 +2,7 @@ package Services.impl;
 
 import Entities.Product;
 import Services.ProductService;
-import exceptions.CustomerNotFoundException;
-import exceptions.DuplicatedProductExceptions;
+import exceptions.DuplicatedProductException;
 import exceptions.ProductNotFoundException;
 import repositories.ProductRepository;
 
@@ -19,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product save(Product product) {
         if (productRepository.selectAll().stream().anyMatch(prd -> prd.equals(product))) {
-            throw new DuplicatedProductExceptions("Product already saved in stock");
+            throw new DuplicatedProductException("Product already saved in stock");
         }else{
             return productRepository.insert(product);
         }

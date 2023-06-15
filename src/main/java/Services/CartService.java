@@ -11,7 +11,7 @@ public interface CartService {
     OrderLine addProduct(Integer productId, Integer quantity);
     Set<OrderLine> getCart();
     OrderLine updateCartProduct(Integer productId, Integer quantity);
-    void removeProduct(Integer productId);
+    void removeProduct(Integer productId, Integer quantity);
     void clearCart();
     Order placeOrder(Payment payment);
 
