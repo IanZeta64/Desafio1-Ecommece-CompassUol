@@ -205,10 +205,8 @@ public class OrderRepositoryImpl implements OrderRepository {
                     Payment payment = Payment.valueOf(resultSet.getString("payment"));
                     Instant createdOn = resultSet.getTimestamp("created_on").toInstant();
                     BigDecimal orderFinalPrice = resultSet.getBigDecimal("final_price");
-                    Order order = new Order(orderId, Set.of(orderLine), payment, customerId, createdOn, orderFinalPrice);
+                    return new Order(orderId, Set.of(orderLine), payment, customerId, createdOn, orderFinalPrice);
 
-//        System.out.println(order);
-        return  order;
     }
 }
 

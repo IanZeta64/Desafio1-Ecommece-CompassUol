@@ -64,7 +64,11 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
 
     @Override
     public Optional<OrderLine> selectById(Integer id) {
-        String sql_selectById = "SELECT * FROM order_lines WHERE id = ? ";
+        String sql_selectById = "SELECT o.id, o.quantity, o.final_price, o.customer_id, o.ordered, " +
+                "p.id AS product_id, p.name AS product_name, p.category AS product_category, p.price AS product_price, p.quantity AS product_quantity " +
+                "FROM order_lines o " +
+                "JOIN products p ON o.product_id = p.id " +
+                "WHERE o.id = ? ";
         try (Connection connection = databaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql_selectById)) {
             statement.setInt(1, id);
