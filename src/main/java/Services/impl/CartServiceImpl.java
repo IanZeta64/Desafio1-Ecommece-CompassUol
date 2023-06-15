@@ -3,42 +3,45 @@ package Services.impl;
 import Entities.Customer;
 import Entities.Order;
 import Entities.OrderLine;
+import Entities.Product;
 import Enums.Payment;
 import Services.CartService;
+import Services.OrderLineService;
+import Services.OrderService;
+import Services.ProductService;
 import exceptions.OrderLineNotFoundException;
-import exceptions.ProductNotFoundException;
-import repositories.OrderLineRepository;
-import repositories.OrderRepository;
-import repositories.ProductRepository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CartServiceImpl implements CartService {
 
-    private final OrderLineRepository orderLineRepository;
-    private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
     private final Customer customer;
 
-    public CartServiceImpl(OrderLineRepository orderLineRepository, OrderRepository orderRepository, ProductRepository productRepository, Customer customer) {
-        this.orderLineRepository = orderLineRepository;
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
+    private final OrderService orderService;
+    private final OrderLineService orderLineService;
+    private final ProductService productService;
+
+    public CartServiceImpl(Customer customer, OrderService orderService, OrderLineService orderLineService, ProductService productService) {
         this.customer = customer;
+        this.orderService = orderService;
+        this.orderLineService = orderLineService;
+        this.productService = productService;
     }
 
     @Override
     public OrderLine addProduct(Integer productId, Integer quantity) {
-//        if (getOrderLinesByCustomerIdAndNotOrdered().stream()
-//                .anyMatch(orderLine -> orderLine.getProduct().equals(productId))){
-//            productRepository.selectById(productId).orElseThrow(() -> new ProductNotFoundException());
-//            OrderLine orderLine = getOrderLinesByCustomerIdAndNotOrdered().stream()
-//                    .filter(ordLn -> ordLn.getProduct().getId().equals(productId)).findFirst()
-//                    .orElseGet(odrLn -> new OrderLine());
-//        }
-        return null;
+            Product product = productService.getById(productId);
+            OrderLine orderLine = new OrderLine(product, quantity, customer.getId());
+            if (orderLineService.existByProductId(productId)){
+                Integer quantityFromOrderLineSearched = getOrderLineByProductId(productId).getQuantity();
+                orderLine.setQuantity(orderLine.getQuantity() + quantityFromOrderLineSearched);
+              return orderLineService.update(orderLine);
+            }else{
+                return orderLineService.save(orderLine);
+            }
     }
 
     @Override
@@ -50,15 +53,13 @@ public class CartServiceImpl implements CartService {
     public OrderLine updateCartProduct(Integer productId, Integer quantity) {
         OrderLine orderLine = getOrderLineByProductId(productId);
         orderLine.setQuantity(quantity);
-        return orderLineRepository.update(orderLine);
+        return orderLineService.update(orderLine);
     }
-
-
 
     @Override
     public void removeProduct(Integer productId) {
-        OrderLine orderLine = getOrderLineByProductId(productId);
-        orderLineRepository.deleteById(orderLine.getId());
+        Integer quantityFromOrderLineSearched = getOrderLineByProductId(productId).getQuantity();
+        orderLineService.delete(quantityFromOrderLineSearched);
     }
 
     @Override
@@ -67,16 +68,20 @@ public class CartServiceImpl implements CartService {
         for (OrderLine orderLine: orderLineList) {
            removeProduct(orderLine.getProduct().getId());
         }
-
+    }
+    @Override
+    public Order placeOrder(Payment payment) {
+        Set<OrderLine> orderLineSet =  getOrderLinesByCustomerIdAndNotOrdered();
+        return orderService.save(new Order(orderLineSet, payment, customer.getId()));
     }
 
     @Override
-    public Order placeOrder(Payment payment) {
-        return orderRepository.insert(new Order(getOrderLinesByCustomerIdAndNotOrdered(), payment, customer.getId()));
+    public List<Order> getAllOrders() {
+        return orderService.getAll().stream().filter(order -> order.getCustomerId().equals(customer.getId())).toList();
     }
 
     private Set<OrderLine> getOrderLinesByCustomerIdAndNotOrdered(){
-        return orderLineRepository.selectAll().stream().filter(orderLine ->
+        return orderLineService.getAll().stream().filter(orderLine ->
                 orderLine.getOrdered().equals(false)  && orderLine.getCustomerId().equals(customer.getId()))
                 .collect(Collectors.toSet());
     }
