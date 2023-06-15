@@ -1,3 +1,15 @@
+PROJECT ECOMMERCE
+
+This project aims to simulate a product registration system and shopping cart systems for an ecommerce, without the use of spring and dependencies, with the exception of the connector with the database.
+I tried to get as close to the spring MVC model, even without using this tool, with layers of repository, service, controller and an additional one for being in the console, a layer of view.
+Initial idea to create a program flow where the user authenticates his registration already made, or creates a new user to make purchases. after that, he will be able to add, list, update and remove products from his cart and complete the order as he wishes.
+The idea of authenticating the user is precisely so that the cart is saved even if another user uses the program and does not place the order, saving the cart in the open and avoiding cart conflicts from other users.
+The system recognizes if it removes more products from the cart than are saved in it, thus removing the order line from the system, as well as the next step is for the system to recognize when the product is in stock or not.
+The system has not yet implemented the flow of menus, this criterion will be implemented in the next commits, as well as the handling of errors.
+updated day (Jun/15/23)
+
+
+
 Follow the progress of the project at this link -> https://trello.com/b/DeG0nY6c/projeto-ecommerce-compass-uol
 
 
