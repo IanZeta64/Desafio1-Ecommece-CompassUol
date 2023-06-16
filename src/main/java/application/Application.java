@@ -25,12 +25,9 @@ public class Application {
     private final ProductController productController;
     private final CustomerController customerController;
 
-    public Application(
-            OrderRepository orderRepository,
-            OrderLineRepository orderLineRepository,
-            ProductRepository productRepository,
-            CustomerRepository customerRepository
-    ) {
+
+    public Application(OrderRepository orderRepository, OrderLineRepository orderLineRepository,
+            ProductRepository productRepository, CustomerRepository customerRepository) {
         OrderService orderService = new OrderServiceImpl(orderRepository);
         OrderLineService orderLineService = new OrderLineServiceImpl(orderLineRepository);
         ProductService productService = new ProductServiceImpl(productRepository);
@@ -53,7 +50,7 @@ public class Application {
         OrderLineRepository orderLineRepository = new OrderLineRepositoryImpl(databaseConfig);
         ProductRepository productRepository = new ProductRepositoryImpl(databaseConfig);
         CustomerRepository customerRepository = new CustomerRepositoryImpl(databaseConfig);
-
+        databaseConfig.createTables();
         Application application = new Application(orderRepository, orderLineRepository, productRepository, customerRepository);
         application.run();
     }

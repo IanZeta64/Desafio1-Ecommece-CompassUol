@@ -28,15 +28,15 @@ public class AppMenuViewImpl implements AppMenuView {
         this.characterMenuStyle = ConsoleUiHelper.askCharacterInput("Enter the character to be used in the menu style");
         do {
             mainMenu();
-        }while(true);
+        } while (true);
     }
 
     private void mainMenu() {
         ConsoleUiHelper.drawHeader("WELCOME TO ECOMMERCE iJAVA", 100, characterMenuStyle);
         int chooseRole = ConsoleUiHelper.askChooseOption("You're a Customer or Employee?", "Customer", "Employee", "System Exit");
-        switch (chooseRole){
+        switch (chooseRole) {
             case 1 -> cartMenu();
-            case 2-> managementMenu();
+            case 2 -> managementMenu();
             case 3 -> System.exit(0);
         }
     }
@@ -44,7 +44,7 @@ public class AppMenuViewImpl implements AppMenuView {
     public void cartMenu() {
         ConsoleUiHelper.drawHeader("SIGN IN", 100, characterMenuStyle);
         int choose = ConsoleUiHelper.askChooseOption("You're a new here?", "Yes", "No", "Return to previous menu", "System Exit");
-        switch (choose){
+        switch (choose) {
             case 1 -> customerRegister();
             case 2 -> customerSignIn();
             case 3 -> mainMenu();
@@ -54,29 +54,29 @@ public class AppMenuViewImpl implements AppMenuView {
 
     private void customerSignIn() {
         ConsoleUiHelper.drawWithPadding("SIGN IN", 100, characterMenuStyle);
-       Login login = customerController.verifyRegister();
+        Login login = customerController.verifyRegister();
         if (login.verify()) {
             do {
                 shopMenu(customerController.getByNameAndDocument(login.customerName(), login.customerDocument()));
-            }while (true);
-        }
-        else {
+            } while (true);
+        } else {
             System.out.println("Error validating information.");
             cartMenu();
         }
 
     }
+
     private void customerRegister() {
         customerController.save();
     }
 
     private void shopMenu(Customer customer) {
         ConsoleUiHelper.drawHeader("CART", 100, characterMenuStyle);
-        int choose =ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", customer.getName()),
+        int choose = ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", customer.getName()),
                 "View all products", "Search product by name", "Add product in cart", "Remove product in cart",
                 "Update product in cart", "View cart", "Clear cart", "Place order", "View all my orders",
                 "Return to main menu", "System exit");
-        switch (choose){
+        switch (choose) {
             case 1 -> productController.getAll();
             case 2 -> productController.searchByNameContainsString();
             case 3 -> cartController.addProduct(customer.getId());
@@ -85,6 +85,7 @@ public class AppMenuViewImpl implements AppMenuView {
             case 6 -> cartController.getCart(customer.getId());
             case 7 -> cartController.clearCart(customer.getId());
             case 8 -> cartController.placeOrder(customer.getId());
+
             case 9 -> cartController.getAllOrders(customer.getId());
             case 10 -> menu();
             case 11 -> System.exit(0);
@@ -93,12 +94,11 @@ public class AppMenuViewImpl implements AppMenuView {
     }
 
 
-
     public void managementMenu() {
         ConsoleUiHelper.drawHeader("MAMAGEMENT", 100, characterMenuStyle);
         int chooseRole = ConsoleUiHelper.askChooseOption("What do you want to do?", "Management Customers",
                 "Management Products", "Return to previous menu", "System exit");
-        switch (chooseRole){
+        switch (chooseRole) {
             case 1 -> managementCustomersMenu();
             case 2 -> managementProductsMenu();
             case 3 -> menu();
@@ -109,11 +109,11 @@ public class AppMenuViewImpl implements AppMenuView {
     private void managementProductsMenu() {
         ConsoleUiHelper.drawWithPadding("PRODUCTS MANAGEMENT", 100, characterMenuStyle);
         String employee = "employee";
-        int choose =ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", employee),
+        int choose = ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", employee),
                 "View all products", "Search product by name", "Add product in stock", "Remove product in stock",
                 "Update product in stock", "View product by id",
                 "Return to previous menu", "System exit");
-        switch (choose){
+        switch (choose) {
             case 1 -> productController.getAll();
             case 2 -> productController.searchByNameContainsString();
             case 3 -> productController.save();
@@ -128,11 +128,11 @@ public class AppMenuViewImpl implements AppMenuView {
     private void managementCustomersMenu() {
         ConsoleUiHelper.drawWithPadding("PRODUCTS MANAGEMENT", 100, characterMenuStyle);
         String employee = "employee";
-        int choose =ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", employee),
+        int choose = ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", employee),
                 "View all customers", "Search customer by name", "Add customer in database", "Remove customer in database",
                 "Update customer in database", "View customer by id",
                 "Return to previous menu", "System exit");
-        switch (choose){
+        switch (choose) {
             case 1 -> customerController.getAll();
             case 2 -> customerController.searchByNameContainsString();
             case 3 -> customerController.save();
@@ -142,6 +142,6 @@ public class AppMenuViewImpl implements AppMenuView {
             case 7 -> managementMenu();
             case 8 -> System.exit(0);
         }
-
     }
 }
+
