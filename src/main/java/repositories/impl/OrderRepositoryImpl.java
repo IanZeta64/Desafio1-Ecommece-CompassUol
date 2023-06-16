@@ -45,6 +45,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             }
             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE products SET quantity = quantity - ?" +
                     " WHERE id = ? ")) {
+
                 for (OrderLine orderline: order.getOrderLineList()) {
                 updateStatement.setInt(1, orderline.getQuantity());
                 updateStatement.setInt(2, orderline.getProduct().getId());
@@ -91,7 +92,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Trate a exceção adequadamente
+            e.printStackTrace(); // Trate ConsoleUiHelper exceção adequadamente
         }
 
         return orders;

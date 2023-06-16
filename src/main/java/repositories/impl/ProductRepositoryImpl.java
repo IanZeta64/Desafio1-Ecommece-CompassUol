@@ -45,6 +45,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         try (Connection connection = databaseConfig.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql_selectAll)) {
+
             while (resultSet.next()) {
                 Product product = getProduct(resultSet);
                 products.add(product);

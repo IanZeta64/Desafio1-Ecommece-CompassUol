@@ -37,18 +37,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order update(Order order) {
-        if (existById(order.getId())){
+        if (existById(order.getId())) {
             return orderRepository.update(order);
-        } else{
+        } else {
             throw new OrderNotFoundException("Order not found, can't update.");
         }
     }
 
     @Override
     public void delete(Integer id) {
-        if (existById(id)){
-             orderRepository.deleteById(id);
-        } else{
+        if (existById(id)) {
+            orderRepository.deleteById(id);
+        } else {
             throw new OrderNotFoundException("Order not found, can't delete.");
         }
     }
@@ -58,4 +58,7 @@ public class OrderServiceImpl implements OrderService {
         long count = orderRepository.selectById(id).stream().count();
         return count > 0;
     }
+
+
+
 }

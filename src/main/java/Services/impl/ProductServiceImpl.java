@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchByNameContainsString(String name) {
-        return productRepository.selectAll().stream().filter(product -> product.getName().contains(name)).toList();
+        return productRepository.selectAll().stream().filter(product -> product.getName().toLowerCase().contains(name.toLowerCase())).toList();
     }
 
     @Override
@@ -61,4 +61,7 @@ public class ProductServiceImpl implements ProductService {
         long cont = productRepository.selectById(id).stream().count();
         return cont > 0;
         }
+    public Boolean quantityInSotckAvaliable(Integer id, Integer quantity){
+        return productRepository.selectById(id).stream().anyMatch(product -> product.getQuantity() >= quantity);
+    }
 }
