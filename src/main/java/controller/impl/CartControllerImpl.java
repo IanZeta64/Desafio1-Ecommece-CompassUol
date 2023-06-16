@@ -1,10 +1,8 @@
 package controller.impl;
-import Entities.Product;
 import Enums.Payment;
 import Services.CartService;
 import controller.CartController;
 import utils.ConsoleUiHelper;
-;
 
 public class CartControllerImpl implements CartController {
 
@@ -18,39 +16,39 @@ public class CartControllerImpl implements CartController {
 
 
     @Override
-    public void addProduct() {
+    public void addProduct(Integer customerId) {
             Integer productId = ConsoleUiHelper.askNumber("Enter the product id to be added to the cart");
             Integer quantity = ConsoleUiHelper.askNumber("Enter the product quantity to be added to the cart");
-            System.out.println(cartService.addProduct(productId, quantity));
+            System.out.println(cartService.addProduct(productId, quantity, customerId));
     }
 
     @Override
-    public void getCart() {
-        ConsoleUiHelper.listOrderLinesWithPages(cartService.getCart());
+    public void getCart(Integer customerId) {
+        ConsoleUiHelper.listOrderLinesPages(cartService.getCart(customerId), 5);
 
     }
 
     @Override
-    public void updateCartProduct() {
+    public void updateCartProduct(Integer customerId) {
+            Integer productId =  ConsoleUiHelper.askNumber("Enter the product id to be updated to the cart: ");
+            Integer quantity = ConsoleUiHelper.askNumber("Enter the product quantity to be updated to the cart: ");
+            System.out.println(cartService.updateCartProduct(productId, quantity, customerId));//UTIL PARA PRINT
+    }
+
+    @Override
+    public void removeProduct(Integer customerId) {
             Integer productId =  ConsoleUiHelper.askNumber("Enter the product id to be added to the cart: ");
-            Integer quantity = ConsoleUiHelper.askNumber("Enter the product quantity to be added to the cart: ");
-            System.out.println(cartService.updateCartProduct(productId, quantity));//UTIL PARA PRINT
+            cartService.removeProduct(productId, customerId);
+            System.out.printf("Product %s removed from cart.%n", productId);
     }
 
     @Override
-    public void removeProduct() {
-            Integer productId =  ConsoleUiHelper.askNumber("Enter the product id to be added to the cart: ");
-            cartService.removeProduct(productId);
-            System.out.println("Product removed from cart");
+    public void clearCart(Integer customerId) {
+        cartService.clearCart(customerId);
     }
 
     @Override
-    public void clearCart() {
-        cartService.clearCart();
-    }
-
-    @Override
-    public void placeOrder() {
+    public void placeOrder(Integer customerId) {
             Payment payment = null;
             var chooseOption = ConsoleUiHelper.askChooseOption("Choose the form of payment: ", "Cash", "Pix",
                     "Credit card", "Debit card", "Bank slip");
@@ -64,23 +62,12 @@ public class CartControllerImpl implements CartController {
                     default -> System.out.println("Select a valid number.");
                 }
             }while (payment == null);
-            System.out.println(cartService.placeOrder(payment));
+            System.out.println(cartService.placeOrder(payment, customerId));
     }
 
     @Override
-    public void getAllOrders() {
-        ConsoleUiHelper.listOrderWithPages(cartService.getAllOrders());
-    }
-
-    @Override
-    public void searchProduct() {
-            String name = ConsoleUiHelper.askSimpleInput("enter your product search");
-        System.out.println(cartService.searchProduct(name));
-    }
-
-    @Override
-    public void getAllProducts() {
-        ConsoleUiHelper.listProductsWithPages(cartService.getAllProducts());
+    public void getAllOrders(Integer customerId) {
+        ConsoleUiHelper.listOrdersPages(cartService.getAllOrders(customerId), 2);
     }
 
 }

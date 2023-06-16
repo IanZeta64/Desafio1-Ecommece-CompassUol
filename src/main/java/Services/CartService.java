@@ -8,17 +8,13 @@ import java.util.List;
 
 public interface CartService {
 
-    OrderLine addProduct(Integer productId, Integer quantity);
-    List<OrderLine> getCart();
-    OrderLine updateCartProduct(Integer productId, Integer quantity);
-    void removeProduct(Integer productId);
-    void clearCart();
-    Order placeOrder(Payment payment);
+    OrderLine addProduct(Integer productId, Integer quantity, Integer customerId);
+    List<OrderLine> getCart(Integer customerId);
+    OrderLine updateCartProduct(Integer productId, Integer quantity, Integer customerId);
+    void removeProduct(Integer productId, Integer customerId);
+    void clearCart(Integer customerId);
+    Order placeOrder(Payment payment, Integer customerId);
 
-    List<Order> getAllOrders();
-
-    List<Product> searchProduct(String name);
-
-    List<Product> getAllProducts();
+    List<Order> getAllOrders(Integer customerId);
 
 }

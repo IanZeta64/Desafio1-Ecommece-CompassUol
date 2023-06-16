@@ -1,16 +1,13 @@
 package controller;
 
 public interface CartController {
-    void addProduct();
-    void getCart();
-    void updateCartProduct();
-    void removeProduct();
-    void clearCart();
-    void placeOrder();
+    void addProduct(Integer customerId);
+    void getCart(Integer customerId);
+    void updateCartProduct(Integer customerId);
+    void removeProduct(Integer customerId);
+    void clearCart(Integer customerId);
+    void placeOrder(Integer customerId);
 
-    void getAllOrders();
+    void getAllOrders(Integer customerId);
 
-    void searchProduct();
-
-    void getAllProducts();
 }

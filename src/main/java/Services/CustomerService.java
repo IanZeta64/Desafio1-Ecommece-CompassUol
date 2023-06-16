@@ -9,4 +9,6 @@ public interface CustomerService extends GenericService<Customer>{
 
     List<Customer> searchByNameContainsString(String name);
 
+    Boolean verifyRegister(String name, String document);
+
 }

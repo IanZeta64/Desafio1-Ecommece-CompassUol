@@ -2,6 +2,7 @@ package Entities;
 import Enums.Payment;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -68,14 +69,20 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", orderLineList=" + orderLineList +
-                ", payment=" + payment +
-                ", customerId=" + customerId +
-                ", createdOn=" + createdOn +
-                ", finalPrice=" + finalPrice +
-                '}';
+
+      return  String.format(
+                "%n%n.:: ORDER - iJAVA ::. %n%n" +
+                "Order id: %s%n" +
+                        "ordered in: %s%n" +
+                        "customer id: %s%n" +
+                        "payment: %s%n" +
+                        "%s" +
+                        "final price: %s%n" +
+                ".::THANKS FOR SHOPPING WITH US::.%n",
+                id, createdOn, customerId, payment.toString(),
+              orderLineList.toString().replace("[", "").replace("]","").replace(",", "").replaceFirst("\\|", " |"),
+              finalPrice.setScale(2, RoundingMode.HALF_UP));
+
     }
     public void setOrderLineList(Set<OrderLine> orderLineList) {
         this.orderLineList = orderLineList;

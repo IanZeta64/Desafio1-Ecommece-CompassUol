@@ -18,6 +18,13 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
     }
+    public Product(Integer id, String name, String category, BigDecimal price, Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.quantity = quantity;
+    }
 
     public Integer getId() {
         return id;

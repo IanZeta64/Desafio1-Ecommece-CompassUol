@@ -26,7 +26,7 @@ public class MainTestesCartService {
         CustomerService customerService = new CustomerServiceImpl(customerRepository);
 
         Customer customer = customerService.getById(1);
-        CartService cartService = new CartServiceImpl(customer, orderService, orderLineService, productService);
+        CartService cartService = new CartServiceImpl(orderService, orderLineService, productService);
 //        System.out.println(cartService.getCart());
 ////        cartService.addProduct(3, 1);
 //        cartService.addProduct(4, 6);
@@ -36,10 +36,10 @@ public class MainTestesCartService {
 //        cartService.removeProduct(3);
 //        System.out.println(cartService.getCart());
 ////        cartService.clearCart();
-        cartService.placeOrder(Payment.PIX);
-        System.out.println(cartService.getCart());
-
-        cartService.getAllOrders().forEach(System.out::println);
+//        cartService.placeOrder(Payment.PIX);
+//        System.out.println(cartService.getCart());
+//
+//        cartService.getAllOrders().forEach(System.out::println);
 
 
 

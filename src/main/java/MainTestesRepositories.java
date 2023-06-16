@@ -11,11 +11,10 @@ import repositories.impl.OrderRepositoryImpl;
 import repositories.impl.ProductRepositoryImpl;
 
 import java.math.BigDecimal;
-import java.sql.SQLOutput;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MainTestesIntegracao {
+public class MainTestesRepositories {
     public static void main(String[] args) {
         DatabaseConfig databaseConfig = new DatabaseConfig();
         OrderLineRepository orderLineRepository = new OrderLineRepositoryImpl(databaseConfig);

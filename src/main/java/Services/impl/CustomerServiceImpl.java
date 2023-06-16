@@ -63,4 +63,10 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> searchByNameContainsString(String name) {
         return customerRepository.selectAll().stream().filter(customer -> customer.getName().contains(name)).toList();
     }
+
+    @Override
+    public Boolean verifyRegister(String name, String document) {
+        return customerRepository.selectAll().stream()
+                .anyMatch(customer -> customer.getName().equalsIgnoreCase(name) && customer.getDocument().equals(document));
+    }
 }
