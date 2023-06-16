@@ -3,6 +3,7 @@ package controller.impl;
 import Entities.Product;
 import Services.ProductService;
 import controller.ProductController;
+import exceptions.ProductNotFoundException;
 import utils.ConsoleUiHelper;
 
 import java.math.BigDecimal;
@@ -32,8 +33,12 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public void getById() {
-       Integer id = ConsoleUiHelper.askNumber("Enter product id ");
-        System.out.println(productService.getById(id));
+        try {
+            Integer id = ConsoleUiHelper.askNumber("Enter product id ");
+            System.out.println(productService.getById(id));
+        }catch (ProductNotFoundException e){
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override

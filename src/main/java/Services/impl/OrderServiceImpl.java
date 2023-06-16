@@ -1,11 +1,9 @@
 package Services.impl;
-
 import Entities.Order;
 import Services.OrderService;
 import exceptions.DuplicatedOrderException;
 import exceptions.OrderNotFoundException;
 import repositories.OrderRepository;
-
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -18,11 +16,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order save(Order order) {
-        if (orderRepository.selectAll().stream().anyMatch(odr -> odr.equals(order))) {
-            throw new DuplicatedOrderException("Order already registered");
-        } else {
+        try {
+            if (orderRepository.selectAll().stream().anyMatch(odr -> odr.equals(order))) {
+                throw new DuplicatedOrderException("Order already registered");
+            }
             return orderRepository.insert(order);
+        } catch (DuplicatedOrderException e) {
+            System.err.println(e.getMessage());
         }
+        return order;
     }
 
     @Override
@@ -31,25 +33,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getById(Integer id) {
-        return orderRepository.selectById(id).orElseThrow(() -> new OrderNotFoundException(String.format("Order not found bi id: %s", id)));
+    public Order getById(Integer id) throws OrderNotFoundException {
+        return orderRepository.selectById(id)
+                .orElseThrow(() -> new OrderNotFoundException(String.format("Order not found bi id: %s", id)));
     }
 
     @Override
     public Order update(Order order) {
-        if (existById(order.getId())) {
+        try {
+            if (!existById(order.getId())) throw new OrderNotFoundException("Order not found, can't update.");
             return orderRepository.update(order);
-        } else {
-            throw new OrderNotFoundException("Order not found, can't update.");
+        } catch (OrderNotFoundException e) {
+            System.err.println(e.getMessage());
         }
+        return order;
     }
 
     @Override
     public void delete(Integer id) {
-        if (existById(id)) {
+        try {
+            if (!existById(id)) throw new OrderNotFoundException("Order not found, can't delete.");
             orderRepository.deleteById(id);
-        } else {
-            throw new OrderNotFoundException("Order not found, can't delete.");
+        }catch (OrderNotFoundException e){
+            System.err.println(e.getMessage());
         }
     }
 
@@ -58,7 +64,4 @@ public class OrderServiceImpl implements OrderService {
         long count = orderRepository.selectById(id).stream().count();
         return count > 0;
     }
-
-
-
 }

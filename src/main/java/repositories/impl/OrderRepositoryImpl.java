@@ -6,12 +6,11 @@ import Entities.Product;
 import Enums.Payment;
 import config.DatabaseConfig;
 import repositories.OrderRepository;
-
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class OrderRepositoryImpl implements OrderRepository {
 
@@ -22,7 +21,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
     @Override
     public Order insert(Order order) {
-        int generatedId = 0;
+        int generatedId;
         String sql_insert = "INSERT INTO orders (payment, customer_id, created_on, final_price) " +
                 "VALUES (?, ?, ?, ?)";
         try (Connection connection = databaseConfig.getConnection();
@@ -53,7 +52,7 @@ public class OrderRepositoryImpl implements OrderRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
         }
         return order;
     }
@@ -92,7 +91,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Trate ConsoleUiHelper exceção adequadamente
+            System.err.println(e.getMessage());
         }
 
         return orders;
@@ -136,7 +135,7 @@ public class OrderRepositoryImpl implements OrderRepository {
                 }).findFirst();
 
         } catch (SQLException e) {
-            e.printStackTrace();// TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
         return Optional.empty();
     }
@@ -151,7 +150,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             statement.setInt(5, order.getId());
             affectedRowsVerify(statement, "Failed to update order line, no rows affected.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return order;
 
@@ -165,7 +164,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             statement.setInt(1, id);
             affectedRowsVerify(statement, "Failed to remove order, no rows affected.");
         } catch (SQLException e) {
-            e.printStackTrace();/// TRATAR EXCEÇÃO
+            System.err.println(e.getMessage());
         }
     }
 

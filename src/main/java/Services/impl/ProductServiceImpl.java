@@ -1,11 +1,9 @@
 package Services.impl;
-
 import Entities.Product;
 import Services.ProductService;
 import exceptions.DuplicatedProductException;
 import exceptions.ProductNotFoundException;
 import repositories.ProductRepository;
-
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
@@ -17,11 +15,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product product) {
-        if (productRepository.selectAll().stream().anyMatch(prd -> prd.equals(product))) {
-            throw new DuplicatedProductException("Product already saved in stock");
-        }else{
+        try {
+            if (productRepository.selectAll().stream().anyMatch(prd -> prd.equals(product))) {
+                throw new DuplicatedProductException("Product already saved in stock");
+            }
             return productRepository.insert(product);
+        } catch (DuplicatedProductException e) {
+            System.err.println(e.getMessage());
         }
+        return product;
     }
 
     @Override
@@ -30,8 +32,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getById(Integer id) {
-        return productRepository.selectById(id).orElseThrow( () ->  new ProductNotFoundException(String.format("Product not found by id: %s", id)));
+    public Product getById(Integer id) throws ProductNotFoundException {
+        return productRepository.selectById(id)
+                .orElseThrow(() -> new ProductNotFoundException(String.format("Product not found by id: %s", id)));
     }
 
     @Override
@@ -41,27 +44,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product update(Product product) {
-        if (existById(product.getId())) {
+        try {
+            if (!existById(product.getId())) throw new ProductNotFoundException("Product not found, can't update");
             return productRepository.update(product);
-        }else {
-            throw new ProductNotFoundException("Product not found, can't update");
+        } catch (ProductNotFoundException e) {
+            System.err.println(e.getMessage());
         }
+        return product;
     }
 
     @Override
     public void delete(Integer id) {
-        if (existById(id)) {
-             productRepository.deleteById(id);
-        }else {
-            throw new ProductNotFoundException("Product not found, can't delete");
+        try {
+            if (!existById(id)) throw new ProductNotFoundException("Product not found, can't delete");
+            productRepository.deleteById(id);
+        } catch (ProductNotFoundException e) {
+            System.err.println(e.getMessage());
         }
     }
+
     @Override
-    public Boolean existById(Integer id){
+    public Boolean existById(Integer id) {
         long cont = productRepository.selectById(id).stream().count();
         return cont > 0;
-        }
-    public Boolean quantityInSotckAvaliable(Integer id, Integer quantity){
+    }
+
+    public Boolean quantityInSotckAvaliable(Integer id, Integer quantity) {
         return productRepository.selectById(id).stream().anyMatch(product -> product.getQuantity() >= quantity);
     }
 }

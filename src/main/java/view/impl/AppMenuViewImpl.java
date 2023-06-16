@@ -11,10 +11,8 @@ import view.AppMenuView;
 public class AppMenuViewImpl implements AppMenuView {
 
     private final CartController cartController;
-
     private final ProductController productController;
     private final CustomerController customerController;
-
     private char characterMenuStyle;
 
     public AppMenuViewImpl(CartController cartController, ProductController productController, CustomerController customerController) {
@@ -63,7 +61,6 @@ public class AppMenuViewImpl implements AppMenuView {
             System.out.println("Error validating information.");
             cartMenu();
         }
-
     }
 
     private void customerRegister() {
@@ -85,14 +82,11 @@ public class AppMenuViewImpl implements AppMenuView {
             case 6 -> cartController.getCart(customer.getId());
             case 7 -> cartController.clearCart(customer.getId());
             case 8 -> cartController.placeOrder(customer.getId());
-
             case 9 -> cartController.getAllOrders(customer.getId());
             case 10 -> menu();
             case 11 -> System.exit(0);
-
         }
     }
-
 
     public void managementMenu() {
         ConsoleUiHelper.drawHeader("MAMAGEMENT", 100, characterMenuStyle);

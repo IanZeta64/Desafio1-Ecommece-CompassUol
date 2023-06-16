@@ -30,8 +30,12 @@ public class CustomerControllerImpl implements CustomerController {
 
     @Override
     public void getById() {
-        Integer id = ConsoleUiHelper.askNumber("Enter a id to search ");
-        System.out.println(customerService.getById(id));
+        try {
+            Integer id = ConsoleUiHelper.askNumber("Enter a id to search ");
+            System.out.println(customerService.getById(id));
+        }catch (CustomerNotFoundException e){
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
