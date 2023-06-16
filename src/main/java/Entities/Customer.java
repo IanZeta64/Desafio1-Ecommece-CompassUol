@@ -15,7 +15,13 @@ public class Customer {
         this.name = name;
         this.birthDate = birthDate;
         this.document = document;
+    }
 
+    public Customer(Integer id, String name, LocalDate birthDate, String document) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.document = document;
     }
 
     public Integer getId() {
@@ -48,12 +54,12 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", birthDate=" + birthDate +
-                ", document='" + document + '\'' +
-                '}';
+       return String.format("Customer: %n" +
+                "id: %s%n" +
+                "name: %s%n" +
+                "birth date: %s/%s/%s%n" +
+                "document: %s%n",
+                id, name,birthDate.getDayOfMonth(), birthDate.getMonth(), birthDate.getYear(), document);
     }
 
     @Override

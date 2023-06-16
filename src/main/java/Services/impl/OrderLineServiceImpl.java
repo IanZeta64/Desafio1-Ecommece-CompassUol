@@ -60,13 +60,15 @@ public class OrderLineServiceImpl implements OrderLineService {
 
 
     @Override
-    public Boolean existByProductIdAndNotOrdered(Integer productId){
-        return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getOrdered().equals(false)).anyMatch( orderLine ->  orderLine.getProduct().getId().equals(productId));
+    public Boolean existByProductIdAndCustomerIdAndNotOrdered(Integer productId, Integer customerId){
+        return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getOrdered().equals(false))
+                .anyMatch( orderLine ->  orderLine.getProduct().getId().equals(productId) && orderLine.getCustomerId().equals(customerId));
     }
 
     @Override
-    public OrderLine findByProductId(Integer productId) {
-        return orderLineRepository.selectAll().stream().filter(product -> product.getProduct().getId().equals(productId))
-                .findFirst().orElseThrow(() -> new OrderLineNotFoundException(String.format("Order line not found by product_id: %s", productId)));
+    public OrderLine findByProductIdAndCustomerId(Integer productId, Integer cutomerId) {
+        return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getProduct().getId().equals(productId)
+                && orderLine.getCustomerId().equals(cutomerId)).findFirst()
+                .orElseThrow(() -> new OrderLineNotFoundException(String.format("Order line not found by product_id: %s", productId)));
     }
 }

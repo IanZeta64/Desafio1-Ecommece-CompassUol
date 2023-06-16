@@ -13,6 +13,7 @@ import repositories.impl.OrderLineRepositoryImpl;
 import repositories.impl.OrderRepositoryImpl;
 import repositories.impl.ProductRepositoryImpl;
 
+
 public class MainTesteCarController {
     public static void main(String[] args) {
         DatabaseConfig dbc = new DatabaseConfig();
@@ -27,18 +28,18 @@ public class MainTesteCarController {
         CustomerService customerService = new CustomerServiceImpl(customerRepository);
 
         Customer customer = customerService.getById(1);
-        CartService cartService = new CartServiceImpl(customer, orderService, orderLineService, productService);
+        CartService cartService = new CartServiceImpl(orderService, orderLineService, productService);
 
         CartController cartController = new CartControllerImpl(cartService);
-
-        cartController.getAllOrders();
-//        System.out.println();
-        cartController.getAllProducts();
-//        cartController.searchProduct();
-//        cartController.addProduct();
-//        cartController.updateCartProduct();
-//        cartController.placeOrder();
-        cartController.getCart();
+//
+//        cartController.getAllOrders();
+////        System.out.println();
+//        cartController.getAllProducts();
+////        cartController.searchProduct();
+////        cartController.addProduct();
+////        cartController.updateCartProduct();
+////        cartController.placeOrder();
+//        cartController.getCart();
 
     }
 }

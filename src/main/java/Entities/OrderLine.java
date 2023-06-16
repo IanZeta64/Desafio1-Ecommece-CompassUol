@@ -1,6 +1,7 @@
 package Entities;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 public class OrderLine {
@@ -81,14 +82,14 @@ public class OrderLine {
 
     @Override
     public String toString() {
-        return "OrderLine{" +
-                "id=" + id +
-                ", product=" + product.getName() + " [id:" + product.getId()+"]" +
-                ", quantity=" + quantity +
-                ", finalPrice=" + finalPrice +
-                ", customerId=" + customerId +
-                ", ordered=" + ordered +
-                '}';
+       return String.format(
+               "| order line id: %s " +
+                        "| product: %s " +
+                       "| product unit price: %s " +
+                        "| quantity: %s " +
+                        "| line price: %s |%n",
+                id, product.getName(), product.getPrice(), quantity, finalPrice.setScale(2, RoundingMode.HALF_UP));
+
     }
 
     @Override
