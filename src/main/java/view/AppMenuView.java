@@ -1,5 +1,5 @@
 package view;
 
-public interface MenuView {
+public interface AppMenuView {
     void menu();
 }
