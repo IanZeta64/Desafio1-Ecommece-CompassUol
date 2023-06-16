@@ -1,8 +1,10 @@
 package controller.impl;
+import Entities.OrderLine;
 import Enums.Payment;
 import Services.CartService;
 import controller.CartController;
 import utils.ConsoleUiHelper;
+import java.math.BigDecimal;
 
 public class CartControllerImpl implements CartController {
 
@@ -62,12 +64,21 @@ public class CartControllerImpl implements CartController {
                     default -> System.out.println("Select a valid number.");
                 }
             }while (payment == null);
-            System.out.println(cartService.placeOrder(payment, customerId));
+           if (confirmOrder(customerId, payment)) System.out.println(cartService.placeOrder(payment, customerId));
+           else System.out.println("Order not placed.");
     }
 
     @Override
     public void getAllOrders(Integer customerId) {
         ConsoleUiHelper.listOrdersPages(cartService.getAllOrders(customerId), 2);
+    }
+    private Boolean confirmOrder(Integer customerId, Payment payment){
+        var orderLineList = cartService.getCart(customerId);
+        BigDecimal finalPriceOrder = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println("\nYour Cart: ");
+        ConsoleUiHelper.listOrderLinesPages(orderLineList, 99);
+        System.out.println("final price: " + finalPriceOrder + "\nPayment: " + payment + "\n");
+        return ConsoleUiHelper.askConfirm("Do you want to place this order?", "Yes, confirm.", "No, cancel.");
     }
 
 }

@@ -14,7 +14,7 @@ public class Order {
     private Set<OrderLine> orderLineList;
     private Payment payment;
     private Integer customerId;
-    private Instant createdOn;
+    private final Instant createdOn;
 
     private BigDecimal finalPrice;
 
