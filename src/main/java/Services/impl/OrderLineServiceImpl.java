@@ -1,15 +1,14 @@
 package Services.impl;
-
 import Entities.OrderLine;
 import Services.OrderLineService;
 import exceptions.*;
 import repositories.OrderLineRepository;
-
 import java.util.List;
 
 public class OrderLineServiceImpl implements OrderLineService {
 
-    private  final OrderLineRepository orderLineRepository;
+    private final OrderLineRepository orderLineRepository;
+
 
     public OrderLineServiceImpl(OrderLineRepository orderLineRepository) {
         this.orderLineRepository = orderLineRepository;
@@ -17,11 +16,15 @@ public class OrderLineServiceImpl implements OrderLineService {
 
     @Override
     public OrderLine save(OrderLine orderLine) {
-        if (orderLineRepository.selectAll().stream().anyMatch(ordLn -> ordLn.equals(orderLine))) {
-            throw new DuplicatedOrderLineException("Order line already registered");
-        } else {
+        try {
+            if (orderLineRepository.selectAll().stream().anyMatch(ordLn -> ordLn.equals(orderLine))) {
+                throw new DuplicatedOrderLineException("Order line already registered. can't save duplicated order line.");
+            }
             return orderLineRepository.insert(orderLine);
+        } catch (DuplicatedOrderLineException e) {
+            System.err.println(e.getMessage());
         }
+        return orderLine;
     }
 
     @Override
@@ -30,25 +33,31 @@ public class OrderLineServiceImpl implements OrderLineService {
     }
 
     @Override
-    public OrderLine getById(Integer id) {
-        return orderLineRepository.selectById(id).orElseThrow(() -> new OrderLineNotFoundException(String.format("Order line not found by id: %s", id)));
+    public OrderLine getById(Integer id) throws OrderLineNotFoundException {
+        return orderLineRepository.selectById(id)
+                .orElseThrow(() -> new OrderLineNotFoundException(String.format("Order line not found by id: %s", id)));
     }
 
     @Override
     public OrderLine update(OrderLine orderLine) {
-        if (existById(orderLine.getId())){
+        try {
+            if (!existById(orderLine.getId()))
+                throw new OrderLineNotFoundException("Order line not found,can't update.");
             return orderLineRepository.update(orderLine);
-        } else{
-            throw new OrderLineNotFoundException("Order line not found,can't update.");
+        } catch (OrderLineNotFoundException e) {
+            System.err.println(e.getMessage());
         }
+        return orderLine;
     }
 
     @Override
     public void delete(Integer id) {
-        if (existById(id)){
+        try {
+            if (!existById(id)) throw new OrderLineNotFoundException("Order line not found,can't delete.");
             orderLineRepository.deleteById(id);
-        }else{
-            throw new OrderLineNotFoundException("Order line not found,can't delete.");
+
+        } catch (OrderLineNotFoundException e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -60,15 +69,15 @@ public class OrderLineServiceImpl implements OrderLineService {
 
 
     @Override
-    public Boolean existByProductIdAndCustomerIdAndNotOrdered(Integer productId, Integer customerId){
+    public Boolean existByProductIdAndCustomerIdAndNotOrdered(Integer productId, Integer customerId) {
         return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getOrdered().equals(false))
-                .anyMatch( orderLine ->  orderLine.getProduct().getId().equals(productId) && orderLine.getCustomerId().equals(customerId));
+                .anyMatch(orderLine -> orderLine.getProduct().getId().equals(productId) && orderLine.getCustomerId().equals(customerId));
     }
 
     @Override
     public OrderLine findByProductIdAndCustomerId(Integer productId, Integer cutomerId) {
         return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getProduct().getId().equals(productId)
-                && orderLine.getCustomerId().equals(cutomerId)).findFirst()
+                        && orderLine.getCustomerId().equals(cutomerId)).findFirst()
                 .orElseThrow(() -> new OrderLineNotFoundException(String.format("Order line not found by product_id: %s", productId)));
     }
 }

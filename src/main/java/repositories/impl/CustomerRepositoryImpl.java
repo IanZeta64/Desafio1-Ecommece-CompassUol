@@ -33,7 +33,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             }
             generatedKeys.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e); // TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
         return customer;
     }
@@ -50,7 +50,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 customers.add(customer);
             }
         } catch (SQLException e) {
-            e.printStackTrace();// TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
 
         return customers;
@@ -71,7 +71,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();// TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
 
         return Optional.empty();
@@ -86,7 +86,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             statement.setInt(4, customer.getId());
             affectedRowsVerify(statement, "Failed to update customer, no rows affected.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return customer;
     }
@@ -98,7 +98,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             statement.setInt(1, id);
             affectedRowsVerify(statement, "Failed to remove customer, no rows affected.");
         } catch (SQLException e) {
-            e.printStackTrace();/// TRATAR EXCEÇÃO
+            System.err.println(e.getMessage());
         }
     }
 

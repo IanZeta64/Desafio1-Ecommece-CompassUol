@@ -1,11 +1,9 @@
 package Services.impl;
-
 import Entities.Customer;
 import Services.CustomerService;
 import exceptions.CustomerNotFoundException;
 import exceptions.DuplicatedCustomerException;
 import repositories.CustomerRepository;
-
 import java.util.List;
 
 public class CustomerServiceImpl implements CustomerService {
@@ -18,11 +16,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        if (customerRepository.selectAll().stream().anyMatch(cstmr -> cstmr.equals(customer))){
-            throw  new DuplicatedCustomerException("Customer already registered");
-        }else {
+        try {
+            if (customerRepository.selectAll().stream().anyMatch(cstmr -> cstmr.equals(customer))) {
+                throw new DuplicatedCustomerException("Customer already registered, not save in database.");
+            }
             return customerRepository.insert(customer);
+        } catch (DuplicatedCustomerException e) {
+            System.err.println(e.getMessage());
         }
+        return customer;
     }
 
     @Override
@@ -31,25 +33,29 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getById(Integer id) {
-        return customerRepository.selectById(id).orElseThrow(() -> new CustomerNotFoundException(String.format("Customer not found by id: %s", id)));
+    public Customer getById(Integer id) throws CustomerNotFoundException {
+        return customerRepository.selectById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(String.format("Customer not found by id: %s", id)));
     }
 
     @Override
     public Customer update(Customer customer) {
-        if (existById(customer.getId())) {
+        try {
+            if (!existById(customer.getId())) throw new CustomerNotFoundException("Customer not found, can't update.");
             return customerRepository.update(customer);
-        }else {
-            throw new CustomerNotFoundException("Customer not found, can't update.");
+        } catch (CustomerNotFoundException e) {
+            System.err.println(e.getMessage());
         }
+        return customer;
     }
 
     @Override
     public void delete(Integer id) {
-        if (existById(id)) {
-             customerRepository.deleteById(id);
-        }else {
-            throw new CustomerNotFoundException("Customer not found, can't delete.");
+        try {
+            if (!existById(id)) throw new CustomerNotFoundException("Customer not found, can't delete.");
+            customerRepository.deleteById(id);
+        } catch (CustomerNotFoundException e) {
+            System.err.println(e.getMessage());
         }
     }
 

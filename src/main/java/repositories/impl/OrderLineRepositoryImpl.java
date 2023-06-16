@@ -34,7 +34,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
             }
             generatedKeys.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e); // TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
         return orderLine;
     }
@@ -55,7 +55,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
                 orderLineList.add(orderLine);
             }
         } catch (SQLException e) {
-            e.printStackTrace();// TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
         return orderLineList;
     }
@@ -79,7 +79,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();// TRATAR EXCESSAO
+            System.err.println(e.getMessage());
         }
         return Optional.empty();
     }
@@ -94,7 +94,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
             statement.setInt(6, orderLine.getId());
             affectedRowsVerify(statement, "Failed to update order line, no rows affected.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return orderLine;
     }
@@ -107,7 +107,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
         statement.setInt(1, id);
         affectedRowsVerify(statement, "Failed to remove order line, no rows affected.");
     } catch (SQLException e) {
-        e.printStackTrace();/// TRATAR EXCEÇÃO
+        System.err.println(e.getMessage());
     }
 }
 

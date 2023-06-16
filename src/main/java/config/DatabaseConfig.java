@@ -37,7 +37,7 @@ public class DatabaseConfig {
                     "customer_id INTEGER," +
                     "ordered BOOLEAN," +
                     "order_id INTEGER" +
-                    ")" +
+                    ");" +
                     "CREATE TABLE IF NOT EXISTS orders (" +
                     "id SERIAL PRIMARY KEY," +
                     "payment VARCHAR(255) NOT NULL," +
@@ -45,10 +45,10 @@ public class DatabaseConfig {
                     "created_on TIMESTAMP," +
                     "final_price NUMERIC" +
                     ");";
-
             statement.executeUpdate(sql_createTables);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
+            System.err.println("Failed to reload tables in database.");
         }
     }
 }
