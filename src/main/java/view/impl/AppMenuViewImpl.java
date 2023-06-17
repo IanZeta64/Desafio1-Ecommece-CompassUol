@@ -54,9 +54,7 @@ public class AppMenuViewImpl implements AppMenuView {
         ConsoleUiHelper.drawWithPadding("SIGN IN", 100, characterMenuStyle);
         Login login = customerController.verifyRegister();
         if (login.verify()) {
-            do {
-                shopMenu(customerController.getByNameAndDocument(login.customerName(), login.customerDocument()));
-            } while (true);
+            shopMenu(customerController.getByNameAndDocument(login.customerName(), login.customerDocument()));
         } else {
             System.out.println("Error validating information.");
             cartMenu();
@@ -65,14 +63,15 @@ public class AppMenuViewImpl implements AppMenuView {
 
     private void customerRegister() {
         customerController.save();
+        customerSignIn();
     }
 
     private void shopMenu(Customer customer) {
         ConsoleUiHelper.drawHeader("CART", 100, characterMenuStyle);
         int choose = ConsoleUiHelper.askChooseOption(String.format("What do you want to do, Mr./Ms %s?", customer.getName()),
                 "View all products", "Search product by name", "Add product in cart", "Remove product in cart",
-                "Update product in cart", "View cart", "Clear cart", "Place order", "View all my orders",
-                "Return to main menu", "System exit");
+                "Update product in cart", "View cart", "Clear cart", "Place order", "View order line by id",
+                "View order by id", "View all my orders", "Return to main menu", "System exit");
         switch (choose) {
             case 1 -> productController.getAll();
             case 2 -> productController.searchByNameContainsString();
@@ -82,10 +81,13 @@ public class AppMenuViewImpl implements AppMenuView {
             case 6 -> cartController.getCart(customer.getId());
             case 7 -> cartController.clearCart(customer.getId());
             case 8 -> cartController.placeOrder(customer.getId());
-            case 9 -> cartController.getAllOrders(customer.getId());
-            case 10 -> menu();
-            case 11 -> System.exit(0);
+            case 9 -> cartController.getOrderLineById(customer.getId());
+            case 10 -> cartController.getOrderById(customer.getId());
+            case 11 -> cartController.getAllOrders(customer.getId());
+            case 12 -> mainMenu();
+            case 13 -> System.exit(0);
         }
+        shopMenu(customer);
     }
 
     public void managementMenu() {
@@ -95,9 +97,10 @@ public class AppMenuViewImpl implements AppMenuView {
         switch (chooseRole) {
             case 1 -> managementCustomersMenu();
             case 2 -> managementProductsMenu();
-            case 3 -> menu();
+            case 3 -> mainMenu();
             case 4 -> System.exit(0);
         }
+        managementMenu();
     }
 
     private void managementProductsMenu() {
