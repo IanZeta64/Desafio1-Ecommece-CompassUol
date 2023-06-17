@@ -11,6 +11,7 @@ import Services.ProductService;
 import exceptions.EmptyCartException;
 import exceptions.OrderLineNotFoundException;
 import exceptions.InsufficientStockException;
+import exceptions.OrderNotFoundException;
 
 import java.util.List;
 import java.util.Objects;
@@ -100,6 +101,20 @@ public class CartServiceImpl implements CartService {
         return orderService.getAll().stream().filter(order -> order.getCustomerId().equals(customerId)).toList();
     }
 
+    @Override
+    public Order getOrderById(Integer orderId, Integer customerId) throws OrderNotFoundException {
+            Order order = orderService.getById(orderId);
+            if (!order.getCustomerId().equals(customerId)) throw new OrderNotFoundException(String.format("Order not found by id: %s", orderId));
+            else return order;
+
+    }
+
+    @Override
+    public OrderLine getOrderLineById(Integer orderLineId, Integer customerId) throws OrderLineNotFoundException {
+        OrderLine orderLine = orderLineService.getById(orderLineId);
+        if (!orderLine.getCustomerId().equals(customerId)) throw new OrderLineNotFoundException(String.format("Order line not found by id: %s", orderLineId));
+        else return orderLine;
+    }
 
     private Set<OrderLine> getOrderLinesByCustomerIdAndNotOrdered(Integer customerId) {
         return orderLineService.getAll().stream().filter(orderLine ->

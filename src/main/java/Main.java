@@ -1,5 +1,7 @@
 import utils.ConsoleUiHelper;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         ConsoleUiHelper.drawWithPadding("TEXTO", 80, '@');

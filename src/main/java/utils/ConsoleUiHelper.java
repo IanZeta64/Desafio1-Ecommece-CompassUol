@@ -1,10 +1,8 @@
 package utils;
-
 import Entities.Customer;
 import Entities.Order;
 import Entities.OrderLine;
 import Entities.Product;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -30,14 +28,12 @@ public class ConsoleUiHelper<T> {
     public static String askSimpleInput(String message) {
         System.out.printf("%s: %n", message);
         return new Scanner(System.in).nextLine().trim();
-
     }
+
     public static char askCharacterInput(String message) {
         System.out.printf("%s: %n", message);
         return new Scanner(System.in).next().trim().charAt(0);
-
     }
-
     public static String askNoEmptyInput(String message, int retries) {
         System.out.printf("%s%n: ", message);
         Scanner sc = new Scanner(System.in);
@@ -61,7 +57,7 @@ public class ConsoleUiHelper<T> {
         do {
             try {
                 choose = sc.nextInt();
-                if (choose < 1 || choose > options.length){
+                if (choose < 1 || choose > options.length) {
                     System.out.println("Enter an integer numeric value:");
                 }
             } catch (InputMismatchException e) {
@@ -73,7 +69,6 @@ public class ConsoleUiHelper<T> {
         } while (choose < 1 || choose > options.length);
         return choose;
     }
-
 
     public static boolean askConfirm(String message, String yes, String no) {
         String[] op = new String[2];
@@ -116,7 +111,7 @@ public class ConsoleUiHelper<T> {
             String row = text.substring(0, limit);
             text = text.substring(row.length());
             int padding = (width - row.length()) / 2;
-            row = character + " ".repeat(padding-1) + row;
+            row = character + " ".repeat(padding - 1) + row;
             row = row + " ".repeat(width - row.length() - 1) + character;
             System.out.println(row);
             count++;
@@ -134,268 +129,83 @@ public class ConsoleUiHelper<T> {
         System.out.println(String.valueOf(character).repeat(width));
     }
 
-    public static void fillVSpace(int lines, int width,char character) {
+    public static void fillVSpace(int lines, int width, char character) {
         drawWithPadding(" ".repeat(lines * width), width, character);
     }
 
     public static String columnPaddingLeft(String text, int width, char pad) {
-        while(text.length() < width){
+        while (text.length() < width) {
             text = String.valueOf(pad).concat(text);
         }
         return text;
     }
 
     public static String columnPaddingRight(String text, int width, char pad) {
-        while(text.length() < width){
+        while (text.length() < width) {
             text = text.concat(String.valueOf(pad));
         }
         return text;
     }
 
-    public static void listProductPages(List<Product> list, int limitPerPg){
+    public static void listProductPages(List<Product> list, int limitPerPg) {
         new ConsoleUiHelper<Product>().listWithPages(list, limitPerPg);
     }
-    public static void listOrderLinesPages(List<OrderLine> list, int limitPerPg){
+
+    public static void listOrderLinesPages(List<OrderLine> list, int limitPerPg) {
         new ConsoleUiHelper<OrderLine>().listWithPages(list, limitPerPg);
     }
-    public static void listOrdersPages(List<Order> list, int limitPerPg){
+
+    public static void listOrdersPages(List<Order> list, int limitPerPg) {
         new ConsoleUiHelper<Order>().listWithPages(list, limitPerPg);
     }
-    public static void listCustomersPages(List<Customer> list, int limitPerPg){
+
+    public static void listCustomersPages(List<Customer> list, int limitPerPg) {
         new ConsoleUiHelper<Customer>().listWithPages(list, limitPerPg);
     }
-private void listWithPages(List<T> list, int limitPerPg){
-    int pg = 1;
-    int skip = 0;
-    int numPg = 1;
-    int limit = 5;
-    boolean continues = true;
-    if (list.size() > limit) {
 
-        do {
-            list.stream().skip(skip).limit(limit).forEach(System.out::println);
+    private void listWithPages(List<T> list, int limitPerPg) {
+        int pg = 1;
+        int skip = 0;
+        int numPg = 1;
+        int limit = 5;
+        boolean continues = true;
+        if (list.size() > limit) {
 
-            System.out.printf("%75s %d %n","PAGE", numPg);
+            do {
+                list.stream().skip(skip).limit(limit).forEach(System.out::println);
 
-            if(skip < limit){
+                System.out.printf("%75s %d %n", "PAGE", numPg);
 
-                pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
-                if(pg == 1)continues = false;
-                else {
-                    skip = limit;
-                    numPg++;
+                if (skip < limit) {
+
+                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
+                    if (pg == 1) continues = false;
+                    else {
+                        skip = limit;
+                        numPg++;
+                    }
+                } else if (list.size() - skip > limit) {
+                    pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
+                    if (pg == 1) continues = false;
+                    else if (pg == 2) {
+                        skip += limit;
+                        numPg++;
+                    } else {
+                        skip -= limit;
+                        numPg--;
+                    }
+                } else {
+
+                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Previous page");
+
+                    if (pg == 1) continues = false;
+                    else {
+                        skip -= limit;
+                        numPg--;
+                    }
                 }
-            }else if(list.size() - skip > limit ){
-                pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
-                if(pg ==1) continues = false;
-                else if (pg == 2) {
-                    skip += limit;
-                    numPg++;
-                }
-                else {
-                    skip -=limit;
-                    numPg--;
-                }
-            }else {
-
-                pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Previous page");
-
-                if(pg ==1)continues = false;
-                else {
-                    skip -= limit;
-                    numPg--;
-                }
-            }
-        }while (continues);
-    } else if (!list.isEmpty()) list.forEach(System.out::println);
-    else System.out.println("List is empty.");
-}
-
-//    public static void listProductsWithPages(List<Product> list) {
-//        int pg = 1;
-//        int skip = 0;
-//        int numPg = 1;
-//        int limit = 5;
-//        boolean continues = true;
-//        if (list.size() > limit) {
-//
-//            do {
-//                list.stream().skip(skip).limit(limit).forEach(System.out::println);
-//
-//                System.out.printf("%75s %d %n","PAGE", numPg);
-//
-//                if(skip < limit){
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
-//                    if(pg == 1)continues = false;
-//                    else {
-//                        skip = limit;
-//                        numPg++;
-//                    }
-//                }else if(list.size() - skip > limit ){
-//                    pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
-//                    if(pg ==1) continues = false;
-//                    else if (pg == 2) {
-//                        skip += limit;
-//                        numPg++;
-//                    }
-//                    else {
-//                        skip -=limit;
-//                        numPg--;
-//                    }
-//                }else {
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Previous page");
-//
-//                    if(pg ==1)continues = false;
-//                    else {
-//                        skip -= limit;
-//                        numPg--;
-//                    }
-//                }
-//            }while (continues);
-//        } else if (!list.isEmpty()) list.forEach(System.out::println);
-//        else System.out.println("List is empty.");
-//    }
-//
-//    public static void listOrderLinesWithPages(List<OrderLine> list) {
-//        int pg = 1;
-//        int skip = 0;
-//        int numPg = 1;
-//        int limit = 5;
-//        boolean continues = true;
-//        if (list.size() > limit) {
-//
-//            do {
-//                list.stream().skip(skip).limit(limit).forEach(System.out::println);
-//
-//                System.out.printf("%75s %d %n","PAGE", numPg);
-//
-//                if(skip < limit){
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
-//                    if(pg == 1)continues = false;
-//                    else {
-//                        skip = limit;
-//                        numPg++;
-//                    }
-//                }else if(list.size() - skip > limit ){
-//                    pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
-//                    if(pg ==1) continues = false;
-//                    else if (pg == 2) {
-//                        skip += limit;
-//                        numPg++;
-//                    }
-//                    else {
-//                        skip -=limit;
-//                        numPg--;
-//                    }
-//                }else {
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Previous page");
-//
-//                    if(pg ==1)continues = false;
-//                    else {
-//                        skip -= limit;
-//                        numPg--;
-//                    }
-//                }
-//            }while (continues);
-//        } else if (!list.isEmpty()) list.forEach(System.out::println);
-//        else System.out.println("List is empty.");
-//    }
-//
-//    public static void listOrderWithPages(List<Order> list) {
-//        int pg = 1;
-//        int skip = 0;
-//        int numPg = 1;
-//        int limit = 2;
-//        boolean continues = true;
-//        if (list.size() > limit) {
-//
-//            do {
-//                list.stream().skip(skip).limit(limit).forEach(System.out::println);
-//
-//                System.out.printf("%75s %d %n","PAGE", numPg);
-//
-//                if(skip < limit){
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
-//                    if(pg == 1)continues = false;
-//                    else {
-//                        skip = limit;
-//                        numPg++;
-//                    }
-//                }else if(list.size() - skip > limit ){
-//                    pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
-//                    if(pg ==1) continues = false;
-//                    else if (pg == limit) {
-//                        skip += limit;
-//                        numPg++;
-//                    }
-//                    else {
-//                        skip -=limit;
-//                        numPg--;
-//                    }
-//                }else {
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Previous page");
-//
-//                    if(pg ==1)continues = false;
-//                    else {
-//                        skip -= limit;
-//                        numPg--;
-//                    }
-//                }
-//            }while (continues);
-//        } else if (!list.isEmpty()) list.forEach(System.out::println);
-//        else System.out.println("List is empty.");
-//
-//    }
-//
-//    public static void listCustomersWithPages(List<Customer> list) {
-//        int pg = 1;
-//        int skip = 0;
-//        int numPg = 1;
-//        int limit = 5;
-//        boolean continues = true;
-//        if (list.size() > limit) {
-//
-//            do {
-//                list.stream().skip(skip).limit(limit).forEach(System.out::println);
-//
-//                System.out.printf("%75s %d %n","PAGE", numPg);
-//
-//                if(skip < 5){
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
-//                    if(pg == 1)continues = false;
-//                    else {
-//                        skip = limit;
-//                        numPg++;
-//                    }
-//                }else if(list.size() - skip > limit ){
-//                    pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
-//                    if(pg == 1) continues = false;
-//                    else if (pg == 2) {
-//                        skip += limit;
-//                        numPg++;
-//                    }
-//                    else {
-//                        skip -=limit;
-//                        numPg--;
-//                    }
-//                }else {
-//
-//                    pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Previous page");
-//
-//                    if(pg ==1)continues = false;
-//                    else {
-//                        skip -= limit;
-//                        numPg--;
-//                    }
-//                }
-//            }while (continues);
-//        } else if (!list.isEmpty()) list.forEach(System.out::println);
-//        else System.out.println("List is empty.");
-//    }
+            } while (continues);
+        } else if (!list.isEmpty()) list.forEach(System.out::println);
+        else System.out.println("List is empty.");
+    }
 }

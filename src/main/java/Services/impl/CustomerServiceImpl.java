@@ -18,7 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer save(Customer customer) {
         try {
             if (customerRepository.selectAll().stream().anyMatch(cstmr -> cstmr.equals(customer))) {
-                throw new DuplicatedCustomerException("Customer already registered, not save in database.");
+                throw new DuplicatedCustomerException("Customer already registered, not saved in database.");
             }
             return customerRepository.insert(customer);
         } catch (DuplicatedCustomerException e) {

@@ -16,4 +16,6 @@ public interface CartService {
 
     List<Order> getAllOrders(Integer customerId);
 
+    Order getOrderById(Integer orderId, Integer customerId);
+    OrderLine getOrderLineById(Integer orderLineId, Integer customerId);
 }

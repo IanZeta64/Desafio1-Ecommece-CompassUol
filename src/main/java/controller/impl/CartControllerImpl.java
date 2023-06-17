@@ -1,5 +1,4 @@
 package controller.impl;
-
 import Entities.OrderLine;
 import Enums.Payment;
 import Services.CartService;
@@ -7,8 +6,8 @@ import controller.CartController;
 import exceptions.EmptyCartException;
 import exceptions.InsufficientStockException;
 import exceptions.OrderLineNotFoundException;
+import exceptions.OrderNotFoundException;
 import utils.ConsoleUiHelper;
-
 import java.math.BigDecimal;
 
 public class CartControllerImpl implements CartController {
@@ -89,6 +88,27 @@ public class CartControllerImpl implements CartController {
     @Override
     public void getAllOrders(Integer customerId) {
         ConsoleUiHelper.listOrdersPages(cartService.getAllOrders(customerId), 2);
+    }
+
+    @Override
+    public void getOrderLineById(Integer customerId) {
+        try {
+            Integer orderLineId = ConsoleUiHelper.askNumber("Enter a order line id:");
+            System.out.println(cartService.getOrderLineById(orderLineId, customerId));
+        }catch (OrderLineNotFoundException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void getOrderById(Integer customerId) {
+        try {
+            Integer orderLineId = ConsoleUiHelper.askNumber("Enter a order line id:");
+            System.out.println(cartService.getOrderById(orderLineId, customerId));
+        }catch (OrderNotFoundException e){
+            System.err.println(e.getMessage());
+        }
+
     }
 
     private Boolean confirmOrder(Integer customerId, Payment payment) {

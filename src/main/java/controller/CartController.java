@@ -10,4 +10,7 @@ public interface CartController {
 
     void getAllOrders(Integer customerId);
 
+    void getOrderLineById(Integer customerId);
+
+    void getOrderById(Integer customerId);
 }

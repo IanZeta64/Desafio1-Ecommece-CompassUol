@@ -56,8 +56,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return customers;
     }
 
-
-
     @Override
     public Optional<Customer> selectById(Integer id) {
         String sql_selectById = "SELECT * FROM customers WHERE id = ?";
