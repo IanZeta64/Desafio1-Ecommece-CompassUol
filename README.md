@@ -102,7 +102,9 @@ The current project has added Maven to facilitate the database connection. If yo
 - It has personalized exception handling specific to the application, providing better reporting for the application manager and information for the user in case of any execution issues.
 - Flow of the menu without using loop commands, only using recursion.
 
+## Entity Relationship Model (ERM):
 
+![Entity Relationship Model - Ecommerce](MER/ERM-challenge-1-compass---ecommerce.png)
 
 
 
