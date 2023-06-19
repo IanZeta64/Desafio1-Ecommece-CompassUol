@@ -33,7 +33,7 @@ public class CartControllerImpl implements CartController {
     public void getCart(Integer customerId) {
         var cart = cartService.getCart(customerId);
         ConsoleUiHelper.listOrderLinesPages(cart, 5);
-        System.out.printf("%90s: %s%n", "Total", cart.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
+        System.out.printf("%90s: %s%n", "Total", cart.stream().map(OrderLine::getOrderLinePrice).reduce(BigDecimal.ZERO, BigDecimal::add));
 
     }
 
@@ -116,7 +116,7 @@ public class CartControllerImpl implements CartController {
     private Boolean confirmOrder(Integer customerId, Payment payment) {
         var orderLineList = cartService.getCart(customerId);
         if (!orderLineList.isEmpty()) {
-            BigDecimal finalPriceOrder = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal finalPriceOrder = orderLineList.stream().map(OrderLine::getOrderLinePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
             System.out.println("\nYour Cart: ");
             ConsoleUiHelper.listOrderLinesPages(orderLineList, 99);
             System.out.println("final price: " + finalPriceOrder + "\nPayment: " + payment + "\n");

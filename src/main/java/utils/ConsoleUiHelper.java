@@ -96,7 +96,6 @@ public class ConsoleUiHelper<T> {
         System.out.println(String.valueOf(character).repeat(width));
     }
 
-
     public static void listProductPages(List<Product> list, int limitPerPg) {
         new ConsoleUiHelper<Product>().listWithPages(list, limitPerPg);
     }
@@ -108,7 +107,6 @@ public class ConsoleUiHelper<T> {
     public static void listOrdersPages(List<Order> list, int limitPerPg) {
         new ConsoleUiHelper<Order>().listWithPages(list, limitPerPg);
     }
-
     public static void listCustomersPages(List<Customer> list, int limitPerPg) {
         new ConsoleUiHelper<Customer>().listWithPages(list, limitPerPg);
     }

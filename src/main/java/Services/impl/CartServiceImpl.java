@@ -35,7 +35,7 @@ public class CartServiceImpl implements CartService {
         if (orderLineService.existByProductIdAndCustomerId(productId, customerId)) {
             OrderLine orderLineSearched = getOrderLineByProductIdAndCustomerId(productId, customerId);
             orderLine.setId(orderLineSearched.getId());
-            orderLine.setQuantity(orderLine.getQuantity() + orderLineSearched.getQuantity());
+            orderLine.setProductQuantity(orderLine.getProductQuantity() + orderLineSearched.getProductQuantity());
             return orderLineService.update(orderLine);
         } else {
             return orderLineService.save(orderLine);
@@ -53,7 +53,7 @@ public class CartServiceImpl implements CartService {
             throw new OrderLineNotFoundException(String.format("Order line not found by product id %s, can't update qauntity %s", productId, quantity));
         }
         OrderLine orderLine = getOrderLineByProductIdAndCustomerId(productId, customerId);
-        orderLine.setQuantity(quantity);
+        orderLine.setProductQuantity(quantity);
         return orderLineService.update(orderLine);
     }
 
@@ -83,7 +83,7 @@ public class CartServiceImpl implements CartService {
         Set<OrderLine> orderLineSet = getOrderLinesByCustomerId(customerId);
         if (!orderLineSet.isEmpty()) {
             orderLineSet.forEach(orderLine -> {
-                if (!productService.quantityInSotckAvaliable(orderLine.getProduct().getId(), orderLine.getQuantity())) {
+                if (!productService.quantityInSotckAvaliable(orderLine.getProduct().getId(), orderLine.getProductQuantity())) {
                     throw new InsufficientStockException(String.format("Product: %s with id: %s is low in stock. Please adjust quantity in order line with id: %s.",
                             orderLine.getProduct().getName(), orderLine.getProduct().getId(), orderLine.getId()));
                 }

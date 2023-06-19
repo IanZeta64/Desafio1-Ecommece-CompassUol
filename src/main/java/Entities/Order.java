@@ -9,30 +9,30 @@ import java.util.Set;
 public class Order {
 
     private Integer id;
-    private Set<OrderLine> orderLineList;
+    private Set<OrderLine> orderLineSet;
     private final Payment payment;
     private final Integer customerId;
     private final Instant createdOn;
     private BigDecimal finalPrice;
 
-    public Order(Integer id, Set<OrderLine> orderLineList, Payment payment, Integer customerId, Instant createdOn, BigDecimal finalPrice) {
+    public Order(Integer id, Set<OrderLine> orderLineSet, Payment payment, Integer customerId, Instant createdOn, BigDecimal finalPrice) {
         this.id = id;
-        this.orderLineList = orderLineList;
+        this.orderLineSet = orderLineSet;
         this.payment = payment;
         this.customerId = customerId;
         this.createdOn = createdOn;
         this.finalPrice = finalPrice;
     }
-    public Order(Set<OrderLine> orderLineList, Payment payment, Integer customerId) {
-        this.orderLineList = orderLineList;
+    public Order(Set<OrderLine> orderLineSet, Payment payment, Integer customerId) {
+        this.orderLineSet = orderLineSet;
         this.payment = payment;
         this.customerId = customerId;
         this.createdOn = Instant.now();
-        this.finalPrice = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.finalPrice = orderLineSet.stream().map(OrderLine::getOrderLinePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void setFinalPrice() {
-        this.finalPrice = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.finalPrice = orderLineSet.stream().map(OrderLine::getOrderLinePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public BigDecimal getFinalPrice() {
@@ -43,8 +43,8 @@ public class Order {
         return id;
     }
 
-    public Set<OrderLine> getOrderLineList() {
-        return Collections.unmodifiableSet(orderLineList);
+    public Set<OrderLine> getOrderLineSet() {
+        return Collections.unmodifiableSet(orderLineSet);
     }
     public Payment getPayment() {
         return payment;
@@ -70,11 +70,11 @@ public class Order {
                         "final price: %s%n" +
                 ".::THANKS FOR SHOPPING WITH US::.%n",
                 id, createdOn, customerId, payment.toString(),
-              orderLineList.toString().replace("[", "").replace("]","").replace(",", "").replaceFirst("\\|", " |"),
+              orderLineSet.toString().replace("[", "").replace("]","").replace(",", "").replaceFirst("\\|", " |"),
               finalPrice.setScale(2, RoundingMode.HALF_UP));
     }
-    public void setOrderLineList(Set<OrderLine> orderLineList) {
-        this.orderLineList = orderLineList;
+    public void setOrderLineSet(Set<OrderLine> orderLineSet) {
+        this.orderLineSet = orderLineSet;
         setFinalPrice();
     }
 }
