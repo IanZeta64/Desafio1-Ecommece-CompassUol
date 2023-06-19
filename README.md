@@ -2,7 +2,7 @@
 
 Challenge description link -> https://legend-nightshade-bd0.notion.site/DESAFIO-1-266f087c9cfd4763b8470cfdd250f077
 
-The project:
+**The project:**
 
 This project aims to simulate a product registration and shopping cart system for an e-commerce platform, without using the Spring Framework. Despite not utilizing this tool, we strive to achieve a similar model to Spring MVC, with layers for repositories, services, controllers, and an additional layer for the console interface. The goal is to follow good architecture practices, clean code principles, and adherence to the S.O.L.I.D. principles.
 
@@ -10,22 +10,22 @@ The program connects to a PostgreSQL database using JDBC and has 5 tables: custo
 
 As a bonus, the program includes authentication for registered customers, ensuring that their shopping cart is always available, even when closing the application and returning later. It is also possible to authenticate as an employee, with manager and salesperson permissions. Only the manager can perform CRUD operations with employees.
 
-Project Structure:
+**Project Structure:**
 The project has several folders for better code organization. I will briefly describe each one:
 
-libs (src/main/java/libs): Contains the driver for connecting to PostgreSQL.
-config (src/main/java/config): Contains the class responsible for configuring and connecting to the database.
-domain (src/main/java/domain): Contains the record classes for objects that are not saved in the database. It includes the login class, which assists in authentication for employees and customers.
-enums (src/main/java/enums): Contains enums that help classify attributes with predefined values.
-utils (src/main/java/utils): Contains helper classes for user input, input validation, and text printing in the console.
-exceptions (src/main/java/exceptions): Contains custom exception classes specific to this program.
-controllers (src/main/java/controllers): Contains controller interfaces for user input and calls to the service layers. The impl subfolder (src/main/java/controllers/impl) contains the classes that implement the interfaces.
-services (src/main/java/services): Contains service interfaces that receive data from the controllers, manipulate object structures, apply business logic and prepare the object to be saved in the repository. The impl subfolder (src/main/java/services/impl) contains the classes that implement the interfaces.
-repositories (src/main/java/repositories): Contains repository interfaces responsible for receiving data from the services and executing SQL commands on the database to save objects. The impl subfolder (src/main/java/repositories/impl) contains the classes that implement the interfaces, with dependencies on the configuration class from the config package.
-view (src/main/java/view): Contains the interface responsible for the main menu method, presenting the available options to the user. The impl subfolder (src/main/java/view/impl) contains the class that implements the interface.
-application (src/main/java/view/application): Contains the class responsible for starting the application. It also performs dependency injection between the layers in the static main method.
+*- libs (src/main/java/libs):* Contains the driver for connecting to PostgreSQL.
+*- config (src/main/java/config):* Contains the class responsible for configuring and connecting to the database.
+*- *domain (src/main/java/domain):* Contains the record classes for objects that are not saved in the database. It includes the login class, which assists in authentication for employees and customers.
+*- enums (src/main/java/enums):* Contains enums that help classify attributes with predefined values.
+*- utils (src/main/java/utils):* Contains helper classes for user input, input validation, and text printing in the console.
+*- exceptions (src/main/java/exceptions):* Contains custom exception classes specific to this program.
+*- controllers (src/main/java/controllers):* Contains controller interfaces for user input and calls to the service layers. The impl subfolder (src/main/java/controllers/impl) contains the classes that implement the interfaces.
+*- services (src/main/java/services):* Contains service interfaces that receive data from the controllers, manipulate object structures, apply business logic and prepare the object to be saved in the repository. The impl subfolder (src/main/java/services/impl) contains the classes that implement the interfaces.
+*- repositories (src/main/java/repositories):* Contains repository interfaces responsible for receiving data from the services and executing SQL commands on the database to save objects. The impl subfolder (src/main/java/repositories/impl) contains the classes that implement the interfaces, with dependencies on the configuration class from the config package.
+*- view (src/main/java/view):* Contains the interface responsible for the main menu method, presenting the available options to the user. The impl subfolder (src/main/java/view/impl) contains the class that implements the interface.
+*- application (src/main/java/view/application):* Contains the class responsible for starting the application. It also performs dependency injection between the layers in the static main method.
 
-Running the Project:
+**Running the Project:**
 
 Importing the PostgreSQL database server:
 Install PostgreSQL 15 servers and PgAdmin 4 on your machine.
@@ -43,20 +43,20 @@ Great! You have imported the server responsible for storing application data, in
 If you choose not to import the data, you can execute the following query in PostgreSQL to create an employee with the name 'ADMIN', register 'ADMIN', and role 'MANAGER':
 INSERT INTO employees (name, register, role)
 VALUES ('ADMIN', 'ADMIN', 'MANAGER');
-If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=rHjDW-_Et5g
+*If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=rHjDW-_Et5g*
 
-Importing data into the PostgreSQL database tables:
+**Importing data into the PostgreSQL database tables:**
 Expand 'Databases', and you should now find the 'Ecommerce' database.
 Right-click on it and select 'Restore' from the expanded options.
 In the 'Format' section, select 'Custom or tar'.
 In the 'Filename' part, click on the folder icon on the left, browse to the DB folder in the project's root directory, open it, select the 'backup_database_ecommerce' file, and click 'Open'. If you can't see the file, at the bottom right of the file selection box, change the option from "Custom files" to "All files".
 Now click 'Restore' and wait for it to finish.
 After that, you should be able to view some data in the table. This data will be used for the program to function correctly.
-If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=vdd66leSDa4
+*If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=vdd66leSDa4*
 
-Please verify if all the steps have been followed correctly. If none of the alternatives solve the issue, try contacting via email: ianpf7@gmail.com
+*Please verify if all the steps have been followed correctly. If none of the alternatives solve the issue, try contacting via email: ianpf7@gmail.com*
 
-Track the project's progress at this link -> https://trello.com/b/DeG0nY6c/projeto-ecommerce-compass-uol
+*Track the project's progress at this link -> https://trello.com/b/DeG0nY6c/projeto-ecommerce-compass-uol*
 
 Challenge description bellow.
 
