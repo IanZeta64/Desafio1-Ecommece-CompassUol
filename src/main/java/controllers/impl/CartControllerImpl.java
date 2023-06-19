@@ -31,7 +31,9 @@ public class CartControllerImpl implements CartController {
 
     @Override
     public void getCart(Integer customerId) {
-        ConsoleUiHelper.listOrderLinesPages(cartService.getCart(customerId), 5);
+        var cart = cartService.getCart(customerId);
+        ConsoleUiHelper.listOrderLinesPages(cart, 5);
+        System.out.printf("%90s: %s%n", "Total", cart.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
 
     }
 

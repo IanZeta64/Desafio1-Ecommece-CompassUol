@@ -31,17 +31,6 @@ public class ConsoleUiHelper<T> {
         System.out.printf("%s: %n", message);
         return new Scanner(System.in).next().trim().charAt(0);
     }
-    public static String askNoEmptyInput(String message, int retries) {
-        System.out.printf("%s%n: ", message);
-        Scanner sc = new Scanner(System.in);
-        String input;
-        int tries = 0;
-        do {
-            input = sc.nextLine().trim();
-            tries++;
-        } while (input.isBlank() && retries > 0 && tries < retries);
-        return input;
-    }
 
     public static int askChooseOption(String message, String... options) {
 
@@ -68,9 +57,6 @@ public class ConsoleUiHelper<T> {
     }
 
     public static boolean askConfirm(String message, String yes, String no) {
-        String[] op = new String[2];
-        op[0] = yes;
-        op[1] = no;
         return askChooseOption(message, yes, no) == 1;
     }
 
@@ -88,21 +74,7 @@ public class ConsoleUiHelper<T> {
         return number;
     }
 
-    public static int drawWithRightPadding(String text, int width, char pad, char margin) {
-        int count = 0;
-        do {
-            int limit = Math.min(text.length(), width - 4);
-            String row = text.substring(0, limit);
-            text = text.substring(row.length());
-            row = margin + row + String.valueOf(pad).repeat(width - row.length() - 4) + margin;
-            System.out.println(row);
-            count++;
-        } while (!text.isEmpty());
-        return count;
-    }
-
-    public static int drawWithPadding(String text, int width, char character) {
-        int count = 0;
+    public static void drawWithPadding(String text, int width, char character) {
         do {
             int limit = Math.min(text.length(), width - 4);
             String row = text.substring(0, limit);
@@ -111,9 +83,7 @@ public class ConsoleUiHelper<T> {
             row = character + " ".repeat(padding - 1) + row;
             row = row + " ".repeat(width - row.length() - 1) + character;
             System.out.println(row);
-            count++;
         } while (!text.isEmpty());
-        return count;
     }
 
     public static void drawHeader(String title, int width, char character) {
@@ -126,23 +96,6 @@ public class ConsoleUiHelper<T> {
         System.out.println(String.valueOf(character).repeat(width));
     }
 
-    public static void fillVSpace(int lines, int width, char character) {
-        drawWithPadding(" ".repeat(lines * width), width, character);
-    }
-
-    public static String columnPaddingLeft(String text, int width, char pad) {
-        while (text.length() < width) {
-            text = String.valueOf(pad).concat(text);
-        }
-        return text;
-    }
-
-    public static String columnPaddingRight(String text, int width, char pad) {
-        while (text.length() < width) {
-            text = text.concat(String.valueOf(pad));
-        }
-        return text;
-    }
 
     public static void listProductPages(List<Product> list, int limitPerPg) {
         new ConsoleUiHelper<Product>().listWithPages(list, limitPerPg);
@@ -164,34 +117,33 @@ public class ConsoleUiHelper<T> {
     }
 
     private void listWithPages(List<T> list, int limitPerPg) {
-        int pg = 1;
+        int pg;
         int skip = 0;
         int numPg = 1;
-        int limit = limitPerPg;
         boolean continues = true;
-        if (list.size() > limit) {
+        if (list.size() > limitPerPg) {
 
             do {
-                list.stream().skip(skip).limit(limit).forEach(System.out::println);
+                list.stream().skip(skip).limit(limitPerPg).forEach(System.out::println);
 
                 System.out.printf("%75s %d %n", "PAGE", numPg);
 
-                if (skip < limit) {
+                if (skip < limitPerPg) {
 
                     pg = askChooseOption("Do you want to leave or go to the next page?", "Exit", "Next page");
                     if (pg == 1) continues = false;
                     else {
-                        skip = limit;
+                        skip = limitPerPg;
                         numPg++;
                     }
-                } else if (list.size() - skip > limit) {
+                } else if (list.size() - skip > limitPerPg) {
                     pg = askChooseOption("\"Do you want to leave or go to the next page?", "Exit", "Next page", "Previous page");
                     if (pg == 1) continues = false;
                     else if (pg == 2) {
-                        skip += limit;
+                        skip += limitPerPg;
                         numPg++;
                     } else {
-                        skip -= limit;
+                        skip -= limitPerPg;
                         numPg--;
                     }
                 } else {
@@ -200,7 +152,7 @@ public class ConsoleUiHelper<T> {
 
                     if (pg == 1) continues = false;
                     else {
-                        skip -= limit;
+                        skip -= limitPerPg;
                         numPg--;
                     }
                 }
