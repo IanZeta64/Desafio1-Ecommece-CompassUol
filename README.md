@@ -41,17 +41,15 @@ The project has several folders for better code organization. I will briefly des
 ### Importing the PostgreSQL database server:
 - Install PostgreSQL 15 servers and PgAdmin 4 on your machine.
 - After installation, open PgAdmin 4 and authenticate.
-- Now, you will access the DB folder in the project's root directory to import the server and make a backup.
+- Now, you will access the 'DB' folder in the project's root directory to import the server and make a backup.
 - Go to 'Tools' -> 'Import/Export Servers'.
-- Leave 'Import' selected. In the 'Data input' box, click on the folder icon on the left, browse to the DB folder in the project's root directory, open it, select the 'server_database_ecommerce_json' file, and click 'Open'.
-- Click 'Next'.
-- Expand the 'Servers' options and select the checkbox for PostgreSQL 15 (or the available version).
-- Click 'Next'.
+- Leave 'Import' selected. In the 'Data input' box, click on the folder icon on the left, browse to the 'DB' folder in the project's root directory, open it, select the 'server_database_ecommerce_json' file, and click 'Open'. Click 'Next'.
+- Expand the 'Servers' options and select the checkbox for PostgreSQL 15 (or the available version). Click 'Next'.
 - It will show you a summary of the operation. Click 'Confirm'.
 - Now, you should see the imported servers on the left side. Click on it, and it will ask for a password to access the server.
 - *****``` Enter this password in the input box and press Enter: 3b3G+X8@vd?=G0p. If necessary, enter the this user to continue: postgres ```*****
 - Great! You have imported the server responsible for storing application data, including the 'Ecommerce' database. 
-- You can run the application without any saved data, but you will only be able to register new items if an employee with the role 'MANAGER' is already registered in the database. 
+- **You can run the application without any saved data, but you will only be able to register new items if an employee with the role *'MANAGER'* is already registered in the database.** 
 - Only then can you access the employee menu to add products, customers, employees, and allow these customers to use the shopping menu.
 - *****```If you choose not to import the data, you can execute the following query in PostgreSQL to create an employee with the name 'ADMIN', register 'ADMIN', and role 'MANAGER': INSERT INTO employees (name, register, role) VALUES ('ADMIN', 'ADMIN', 'MANAGER'); ```*****
 
