@@ -65,6 +65,7 @@ The project has several folders for better code organization. I will briefly des
 - If you can't see the file, at the bottom right of the file selection box, change the option from "Custom files" to "All files".
 - Now click 'Restore' and wait for it to finish.
 - After that, you should be able to view some data in the table. This data will be used for the program to function correctly.
+
 *If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=vdd66leSDa4*
 
 *Please verify if all the steps have been followed correctly. If none of the alternatives solve the issue, try contacting via email: ianpf7@gmail.com*
