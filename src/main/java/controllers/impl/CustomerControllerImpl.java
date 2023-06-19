@@ -1,7 +1,7 @@
-package controller.impl;
+package controllers.impl;
 import Entities.Customer;
 import Services.CustomerService;
-import controller.CustomerController;
+import controllers.CustomerController;
 import domain.Login;
 import exceptions.CustomerNotFoundException;
 import utils.ConsoleUiHelper;

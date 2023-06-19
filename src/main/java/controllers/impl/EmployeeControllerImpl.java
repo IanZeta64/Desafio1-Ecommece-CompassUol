@@ -1,8 +1,8 @@
-package controller.impl;
+package controllers.impl;
 import Entities.Employee;
-import Enums.Role;
+import enums.Role;
 import Services.EmployeeService;
-import controller.EmployeeController;
+import controllers.EmployeeController;
 import domain.Login;
 import exceptions.EmployeeNotFoundException;
 import utils.ConsoleUiHelper;

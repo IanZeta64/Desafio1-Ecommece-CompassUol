@@ -1,7 +1,7 @@
-package controller.impl;
+package controllers.impl;
 import Entities.Product;
 import Services.ProductService;
-import controller.ProductController;
+import controllers.ProductController;
 import exceptions.ProductNotFoundException;
 import utils.ConsoleUiHelper;
 import java.math.BigDecimal;

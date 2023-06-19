@@ -1,5 +1,5 @@
 package Entities;
-import Enums.Payment;
+import enums.Payment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
