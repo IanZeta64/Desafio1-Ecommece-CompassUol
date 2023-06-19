@@ -80,6 +80,9 @@ The project has several folders for better code organization. I will briefly des
 - Click "Run".
 - Now we will run the console application.
 
+### Identifying PostgreSQL driver:
+The current project has added Maven to facilitate the database connection. If you are unable to run it with the Maven dependencies, you can either update to the latest version or manually add the PostgreSQL driver to your IDE. The driver is located in *src/main/java/libs* with the name *postgresql-42.6.0.driverJDBC.jar*. After doing so, the application should run normally.
+
 ### Console:
 - In the console, it will ask you to customize the menu style. Choose a character, type it, and press enter.
 - After that, it will welcome you and you should choose between the customer menu, employee menu, or to exit the application.
