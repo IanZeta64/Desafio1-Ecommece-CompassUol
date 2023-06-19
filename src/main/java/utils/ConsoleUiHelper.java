@@ -1,8 +1,6 @@
 package utils;
-import Entities.Customer;
-import Entities.Order;
-import Entities.OrderLine;
-import Entities.Product;
+import Entities.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -162,12 +160,15 @@ public class ConsoleUiHelper<T> {
     public static void listCustomersPages(List<Customer> list, int limitPerPg) {
         new ConsoleUiHelper<Customer>().listWithPages(list, limitPerPg);
     }
+    public static void listEmployeesPages(List<Employee> list, int limitPerPg) {
+        new ConsoleUiHelper<Employee>().listWithPages(list, limitPerPg);
+    }
 
     private void listWithPages(List<T> list, int limitPerPg) {
         int pg = 1;
         int skip = 0;
         int numPg = 1;
-        int limit = 5;
+        int limit = limitPerPg;
         boolean continues = true;
         if (list.size() > limit) {
 

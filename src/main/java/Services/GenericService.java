@@ -1,7 +1,4 @@
 package Services;
-
-import Entities.Product;
-
 import java.util.List;
 
 public interface GenericService<T> {

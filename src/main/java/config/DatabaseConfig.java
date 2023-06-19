@@ -17,33 +17,39 @@ public class DatabaseConfig {
     public void createTables() {
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()){
             String sql_createTables = "CREATE TABLE IF NOT EXISTS customers (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "name VARCHAR(255) NOT NULL," +
-                    "birth_date DATE," +
+                    "id SERIAL PRIMARY KEY, " +
+                    "name VARCHAR(255) NOT NULL, " +
+                    "birth_date DATE, " +
                     "document VARCHAR(14)" +
                     ");" +
                     "CREATE TABLE IF NOT EXISTS products (" +
-                    "id INTEGER," +
-                    "name VARCHAR(255)," +
-                    "category VARCHAR(255)," +
-                    "price NUMERIC," +
+                    "id INTEGER, " +
+                    "name VARCHAR(255), " +
+                    "category VARCHAR(255), " +
+                    "price NUMERIC, " +
                     "quantity INTEGER" +
                     ");" +
                     "CREATE TABLE IF NOT EXISTS order_lines (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "product_id INTEGER NOT NULL," +
-                    "quantity INTEGER," +
-                    "final_price NUMERIC," +
-                    "customer_id INTEGER," +
-                    "ordered BOOLEAN," +
+                    "id SERIAL PRIMARY KEY, " +
+                    "product_id INTEGER NOT NULL, " +
+                    "quantity INTEGER, " +
+                    "final_price NUMERIC, " +
+                    "customer_id INTEGER, " +
+                    "ordered BOOLEAN, " +
                     "order_id INTEGER" +
                     ");" +
                     "CREATE TABLE IF NOT EXISTS orders (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "payment VARCHAR(255) NOT NULL," +
-                    "customer_id INTEGER NOT NULL," +
-                    "created_on TIMESTAMP," +
+                    "id SERIAL PRIMARY KEY, " +
+                    "payment VARCHAR(255) NOT NULL, " +
+                    "customer_id INTEGER NOT NULL, " +
+                    "created_on TIMESTAMP, " +
                     "final_price NUMERIC" +
+                    ");" +
+                    "CREATE TABLE IF NOT EXISTS employees (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "name VARCHAR(255), " +
+                    "register VARCHAR(255), " +
+                    "role VARCHAR(255)" +
                     ");";
             statement.executeUpdate(sql_createTables);
         } catch (SQLException e) {

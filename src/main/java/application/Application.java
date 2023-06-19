@@ -1,47 +1,44 @@
 package application;
-
 import Services.*;
 import Services.impl.*;
 import config.DatabaseConfig;
 import controller.CartController;
 import controller.CustomerController;
+import controller.EmployeeController;
 import controller.ProductController;
 import controller.impl.CartControllerImpl;
 import controller.impl.CustomerControllerImpl;
+import controller.impl.EmployeeControllerImpl;
 import controller.impl.ProductControllerImpl;
-import repositories.CustomerRepository;
-import repositories.OrderLineRepository;
-import repositories.OrderRepository;
-import repositories.ProductRepository;
-import repositories.impl.CustomerRepositoryImpl;
-import repositories.impl.OrderLineRepositoryImpl;
-import repositories.impl.OrderRepositoryImpl;
-import repositories.impl.ProductRepositoryImpl;
+import repositories.*;
+import repositories.impl.*;
 import view.AppMenuView;
 import view.impl.AppMenuViewImpl;
 
 public class Application {
-    private final CartController cartController;
-    private final ProductController productController;
-    private final CustomerController customerController;
+
+    private final AppMenuView appMenuView;
 
 
     public Application(OrderRepository orderRepository, OrderLineRepository orderLineRepository,
-            ProductRepository productRepository, CustomerRepository customerRepository) {
+                       ProductRepository productRepository, CustomerRepository customerRepository,
+                       EmployeeRepository employeeRepository) {
         OrderService orderService = new OrderServiceImpl(orderRepository);
         OrderLineService orderLineService = new OrderLineServiceImpl(orderLineRepository);
         ProductService productService = new ProductServiceImpl(productRepository);
         CustomerService customerService = new CustomerServiceImpl(customerRepository);
         CartService cartService = new CartServiceImpl(orderService, orderLineService, productService);
+        EmployeeService employeeService = new EmployeeServiceImpl(employeeRepository);
 
-        this.productController = new ProductControllerImpl(productService);
-        this.customerController = new CustomerControllerImpl(customerService);
-        this.cartController = new CartControllerImpl(cartService);
+        ProductController productController = new ProductControllerImpl(productService);
+        CustomerController customerController = new CustomerControllerImpl(customerService);
+        CartController cartController = new CartControllerImpl(cartService);
+        EmployeeController employeeController = new EmployeeControllerImpl(employeeService);
+        this.appMenuView = new AppMenuViewImpl(cartController, productController, customerController, employeeController);
     }
 
     public void run() {
-        AppMenuView appMenuView = new AppMenuViewImpl(cartController, productController, customerController);
-        appMenuView.menu();
+        this.appMenuView.menu();
     }
 
     public static void main(String[] args) {
@@ -50,8 +47,10 @@ public class Application {
         OrderLineRepository orderLineRepository = new OrderLineRepositoryImpl(databaseConfig);
         ProductRepository productRepository = new ProductRepositoryImpl(databaseConfig);
         CustomerRepository customerRepository = new CustomerRepositoryImpl(databaseConfig);
+        EmployeeRepository employeeRepository = new EmployeeRepositoryImpl(databaseConfig);
         databaseConfig.createTables();
-        Application application = new Application(orderRepository, orderLineRepository, productRepository, customerRepository);
+        Application application = new Application(orderRepository, orderLineRepository, productRepository,
+                customerRepository, employeeRepository);
         application.run();
     }
 }

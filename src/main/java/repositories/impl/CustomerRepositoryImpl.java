@@ -3,7 +3,6 @@ package repositories.impl;
 import Entities.Customer;
 import config.DatabaseConfig;
 import repositories.CustomerRepository;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,7 +51,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         return customers;
     }
 
@@ -71,7 +69,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         return Optional.empty();
     }
 
@@ -105,10 +102,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         String name = resultSet.getString("name");
         LocalDate birthDate = resultSet.getDate("birth_date").toLocalDate();
         String document = resultSet.getString("document");
-
-        Customer customer = new Customer(name, birthDate, document);
-        customer.setId(id);
-        return customer;
+        return new Customer(id, name, birthDate, document);
     }
 
     private void setCustomer(Customer customer, PreparedStatement statement) throws SQLException {

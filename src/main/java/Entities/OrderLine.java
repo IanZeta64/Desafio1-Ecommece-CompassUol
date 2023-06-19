@@ -1,17 +1,15 @@
 package Entities;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
 public class OrderLine {
-
     private Integer id;
-    private Product product;
+    private final Product product;
     private Integer quantity;
     private BigDecimal finalPrice;
-    private Integer customerId;
-    private Boolean ordered;
+    private final Integer customerId;
+    private final Boolean ordered;
 
     public OrderLine(Product product, Integer quantity, Integer customerId) {
         this.product = product;
@@ -20,7 +18,6 @@ public class OrderLine {
         this.finalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
         this.ordered = false;
     }
-
     public OrderLine(Integer id, Product product, Integer quantity, BigDecimal finalPrice, Integer customerId, Boolean ordered) {
         this.id = id;
         this.product = product;
@@ -29,40 +26,21 @@ public class OrderLine {
         this.customerId = customerId;
         this.ordered = ordered;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
-
     public Integer getId() {
         return id;
     }
-
     public Integer getCustomerId() {
         return customerId;
     }
-
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
-    }
-
     public Boolean getOrdered() {
         return ordered;
     }
-
-
-    public void setOrdered(Boolean ordered) {
-        this.ordered = ordered;
-    }
-
     public Product getProduct() {
         return product;
     }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -84,21 +62,19 @@ public class OrderLine {
     public String toString() {
        return String.format(
                "| order line id: %s " +
-                        "| product: %s " +
-                       "| product unit price: %s " +
+                        "| product: %s  [id: %s]" +
+                       "| unit price: %s " +
                         "| quantity: %s " +
                         "| line price: %s |%n",
-                id, product.getName(), product.getPrice(), quantity, finalPrice.setScale(2, RoundingMode.HALF_UP));
+                id, product.getName(), product.getId(), product.getPrice(), quantity, finalPrice.setScale(2, RoundingMode.HALF_UP));
 
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof OrderLine orderLine)) return false;
         return getProduct().equals(orderLine.getProduct()) && getQuantity().equals(orderLine.getQuantity()) && getFinalPrice().equals(orderLine.getFinalPrice()) && getCustomerId().equals(orderLine.getCustomerId()) && getOrdered().equals(orderLine.getOrdered());
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(getProduct(), getQuantity(), getFinalPrice(), getCustomerId(), getOrdered());

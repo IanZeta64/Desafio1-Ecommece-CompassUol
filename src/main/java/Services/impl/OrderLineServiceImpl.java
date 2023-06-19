@@ -69,8 +69,9 @@ public class OrderLineServiceImpl implements OrderLineService {
 
 
     @Override
-    public Boolean existByProductIdAndCustomerIdAndNotOrdered(Integer productId, Integer customerId) {
-        return orderLineRepository.selectAll().stream().filter(orderLine -> orderLine.getOrdered().equals(false))
+    public Boolean existByProductIdAndCustomerId(Integer productId, Integer customerId) {
+        return orderLineRepository.selectAll().stream()
+//                .filter(orderLine -> orderLine.getOrdered().equals(false))
                 .anyMatch(orderLine -> orderLine.getProduct().getId().equals(productId) && orderLine.getCustomerId().equals(customerId));
     }
 
