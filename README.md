@@ -5,7 +5,7 @@
 
 This project aims to simulate a product registration and shopping cart system for an e-commerce platform, without using the Spring Framework. Despite not utilizing this tool, we strive to achieve a similar model to Spring MVC, with layers for repositories, services, controllers, and an additional layer for the console interface. The goal is to follow good architecture practices, clean code principles, and adherence to the S.O.L.I.D. principles.
 
-The project aimed to experiment and apply the main concepts of OOP, such as inheritance, polymorphism, encapsulation, and abstraction, in addition to utilizing Java features like Stream, Enum and Generics.
+The project aimed to experiment and apply the main concepts of OOP, such as inheritance, polymorphism, encapsulation, abstraction, and dependency injection, in addition to utilizing Java features like Stream, Enum and Generics.
 
 The program connects to a PostgreSQL database using JDBC and has 5 tables: customers, employees, products, order_lines, and orders. The project offers CRUD functionality for products, customers, and employees, as well as the ability to add products to the shopping cart, view the cart, place an order, and calculate the final value.
 
