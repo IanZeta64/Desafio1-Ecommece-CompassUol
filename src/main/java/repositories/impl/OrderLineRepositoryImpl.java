@@ -118,8 +118,8 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
     }
     private  void setOrderLine(OrderLine orderLine, PreparedStatement statement) throws SQLException {
         statement.setInt(1, orderLine.getProduct().getId());
-        statement.setInt(2, orderLine.getQuantity());
-        statement.setBigDecimal(3, orderLine.getFinalPrice());
+        statement.setInt(2, orderLine.getProductQuantity());
+        statement.setBigDecimal(3, orderLine.getOrderLinePrice());
         statement.setInt(4, orderLine.getCustomerId());
         statement.setBoolean(5, orderLine.getOrdered());
     }

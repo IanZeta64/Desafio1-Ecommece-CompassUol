@@ -44,8 +44,8 @@ public class OrderRepositoryImpl implements OrderRepository {
             try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE products SET quantity = quantity - ?" +
                     " WHERE id = ? ")) {
 
-                for (OrderLine orderline: order.getOrderLineList()) {
-                updateStatement.setInt(1, orderline.getQuantity());
+                for (OrderLine orderline: order.getOrderLineSet()) {
+                updateStatement.setInt(1, orderline.getProductQuantity());
                 updateStatement.setInt(2, orderline.getProduct().getId());
                 updateStatement.executeUpdate();
                 }
@@ -76,15 +76,15 @@ public class OrderRepositoryImpl implements OrderRepository {
                 if (orderMap.containsKey(orderId)) {
                     Set<OrderLine> existingOrderLineList = orderLineListMap.get(orderId);
                     Set<OrderLine> updatedOrderLineList = new HashSet<>(existingOrderLineList);
-                    updatedOrderLineList.addAll(order.getOrderLineList());
+                    updatedOrderLineList.addAll(order.getOrderLineSet());
                     orderLineListMap.put(orderId, updatedOrderLineList);
                 } else {
                     orderMap.put(orderId, order);
-                    orderLineListMap.put(orderId, new HashSet<>(order.getOrderLineList()));
+                    orderLineListMap.put(orderId, new HashSet<>(order.getOrderLineSet()));
                 }
             }
             orders = orderMap.entrySet().stream().map( entryMap -> {
-                 entryMap.getValue().setOrderLineList(orderLineListMap.get(entryMap.getKey()));
+                 entryMap.getValue().setOrderLineSet(orderLineListMap.get(entryMap.getKey()));
                  return entryMap.getValue();
             }).toList();
 
@@ -120,16 +120,16 @@ public class OrderRepositoryImpl implements OrderRepository {
                     if (orderMap.containsKey(orderId)) {
                         Set<OrderLine> existingOrderLineList = orderLineListMap.get(orderId);
                         Set<OrderLine> updatedOrderLineList = new HashSet<>(existingOrderLineList);
-                        updatedOrderLineList.addAll(order.getOrderLineList());
+                        updatedOrderLineList.addAll(order.getOrderLineSet());
                         orderLineListMap.put(orderId, updatedOrderLineList);
                     } else {
                         orderMap.put(orderId, order);
-                        orderLineListMap.put(orderId, new HashSet<>(order.getOrderLineList()));
+                        orderLineListMap.put(orderId, new HashSet<>(order.getOrderLineSet()));
                     }
                 }
                 resultSet.close();
                 return orderMap.entrySet().stream().map( entryMap -> {
-                    entryMap.getValue().setOrderLineList(orderLineListMap.get(entryMap.getKey()));
+                    entryMap.getValue().setOrderLineSet(orderLineListMap.get(entryMap.getKey()));
                     return entryMap.getValue();
                 }).findFirst();
 
