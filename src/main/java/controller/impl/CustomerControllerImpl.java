@@ -54,12 +54,6 @@ public class CustomerControllerImpl implements CustomerController {
         System.out.printf("Customer %s deleted.%n", id);
     }
 
-    @Override
-    public void existById() {
-        Integer id = ConsoleUiHelper.askNumber("Enter a customer id to be checked ");
-        if (customerService.existById(id)) System.out.printf("Customer %s exists in database.%n", id);
-        else  System.out.printf("Customer %s doesn't exists in database.%n", id);
-    }
 
     @Override
     public void searchByNameContainsString() {
@@ -75,7 +69,8 @@ public class CustomerControllerImpl implements CustomerController {
     }
 
     @Override
-    public Customer getByNameAndDocument(String name, String document) {
+    public Customer getByNameAndDocument(String name, String document) throws CustomerNotFoundException {
+
         return customerService.getAll().stream().filter(customer ->  customer.getDocument().equals(document) && customer.getName().equals(name))
                 .findFirst().orElseThrow( () -> new CustomerNotFoundException("Customer not found in database."));
     }

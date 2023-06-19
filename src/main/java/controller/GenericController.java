@@ -1,12 +1,8 @@
 package controller;
-
-import java.util.List;
-
-public interface GenericController<T> {
+public interface GenericController {
     void save();
     void getAll();
     void getById();
     void update();
     void delete();
-    void existById();
 }

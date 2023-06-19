@@ -1,10 +1,8 @@
 package repositories.impl;
-
 import Entities.OrderLine;
 import Entities.Product;
 import config.DatabaseConfig;
 import repositories.OrderLineRepository;
-
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ public class OrderLineRepositoryImpl implements OrderLineRepository {
         String sql_selectAll = "SELECT ol.id, p.id AS product_id, p.name AS product_name, p.category AS Product_category," +
                 " p.price AS product_price, p.quantity AS product_quantity, ol.quantity, ol.final_price, ol.customer_id, ol.ordered " +
                 "FROM order_lines ol " +
-                "JOIN products p ON ol.product_id = p.id ";
+                "JOIN products p ON ol.product_id = p.id WHERE  ol.ordered = false ";
         try (Connection connection = databaseConfig.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql_selectAll)) {

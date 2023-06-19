@@ -38,8 +38,8 @@ public class CartControllerImpl implements CartController {
     @Override
     public void updateCartProduct(Integer customerId) {
         try {
-            Integer productId = ConsoleUiHelper.askNumber("Enter the product id to be updated to the cart: ");
-            Integer quantity = ConsoleUiHelper.askNumber("Enter the product quantity to be updated to the cart: ");
+            Integer productId = ConsoleUiHelper.askNumber("Enter the product id to be updated to the cart");
+            Integer quantity = ConsoleUiHelper.askNumber("Enter the product quantity to be updated to the cart");
             System.out.println(cartService.updateCartProduct(productId, quantity, customerId));
         } catch (OrderLineNotFoundException e) {
             System.err.println(e.getMessage());
@@ -49,7 +49,7 @@ public class CartControllerImpl implements CartController {
     @Override
     public void removeProduct(Integer customerId) {
         try {
-            Integer productId = ConsoleUiHelper.askNumber("Enter the product id to be added to the cart: ");
+            Integer productId = ConsoleUiHelper.askNumber("Enter the product id to be added to the cart");
             cartService.removeCartProduct(productId, customerId);
             System.out.printf("Product %s removed from cart.%n", productId);
         } catch (OrderLineNotFoundException e) {
@@ -93,7 +93,7 @@ public class CartControllerImpl implements CartController {
     @Override
     public void getOrderLineById(Integer customerId) {
         try {
-            Integer orderLineId = ConsoleUiHelper.askNumber("Enter a order line id:");
+            Integer orderLineId = ConsoleUiHelper.askNumber("Enter a order line id");
             System.out.println(cartService.getOrderLineById(orderLineId, customerId));
         }catch (OrderLineNotFoundException e){
             System.err.println(e.getMessage());
@@ -103,7 +103,7 @@ public class CartControllerImpl implements CartController {
     @Override
     public void getOrderById(Integer customerId) {
         try {
-            Integer orderLineId = ConsoleUiHelper.askNumber("Enter a order line id:");
+            Integer orderLineId = ConsoleUiHelper.askNumber("Enter a order line id");
             System.out.println(cartService.getOrderById(orderLineId, customerId));
         }catch (OrderNotFoundException e){
             System.err.println(e.getMessage());
@@ -113,11 +113,14 @@ public class CartControllerImpl implements CartController {
 
     private Boolean confirmOrder(Integer customerId, Payment payment) {
         var orderLineList = cartService.getCart(customerId);
-        BigDecimal finalPriceOrder = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-        System.out.println("\nYour Cart: ");
-        ConsoleUiHelper.listOrderLinesPages(orderLineList, 99);
-        System.out.println("final price: " + finalPriceOrder + "\nPayment: " + payment + "\n");
-        return ConsoleUiHelper.askConfirm("Do you want to place this order?", "Yes, confirm.", "No, cancel.");
+        if (!orderLineList.isEmpty()) {
+            BigDecimal finalPriceOrder = orderLineList.stream().map(OrderLine::getFinalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            System.out.println("\nYour Cart: ");
+            ConsoleUiHelper.listOrderLinesPages(orderLineList, 99);
+            System.out.println("final price: " + finalPriceOrder + "\nPayment: " + payment + "\n");
+            return ConsoleUiHelper.askConfirm("Do you want to place this order?", "Yes, confirm.", "No, cancel.");
+        }
+        return false;
     }
 }
 

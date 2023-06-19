@@ -4,7 +4,7 @@ import Entities.OrderLine;
 
 public interface OrderLineService extends GenericService<OrderLine> {
 
-     Boolean existByProductIdAndCustomerIdAndNotOrdered(Integer productId, Integer customerId);
+     Boolean existByProductIdAndCustomerId(Integer productId, Integer customerId);
 
      OrderLine findByProductIdAndCustomerId(Integer productId, Integer customerId);
 }

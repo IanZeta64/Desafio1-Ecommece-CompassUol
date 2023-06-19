@@ -1,7 +1,5 @@
 package domain;
 
-import Entities.Customer;
-
-public record Login (Boolean verify, String customerName, String customerDocument) {
+public record Login (Boolean verify, String username, String password) {
 
 }

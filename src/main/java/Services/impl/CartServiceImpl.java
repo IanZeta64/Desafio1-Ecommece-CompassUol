@@ -12,9 +12,7 @@ import exceptions.EmptyCartException;
 import exceptions.OrderLineNotFoundException;
 import exceptions.InsufficientStockException;
 import exceptions.OrderNotFoundException;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,8 +32,8 @@ public class CartServiceImpl implements CartService {
     public OrderLine addCartProduct(Integer productId, Integer quantity, Integer customerId) throws OrderLineNotFoundException {
         Product product = productService.getById(productId);
         OrderLine orderLine = new OrderLine(product, quantity, customerId);
-        if (orderLineService.existByProductIdAndCustomerIdAndNotOrdered(productId, customerId)) {
-            OrderLine orderLineSearched = getOrderLineByProductIdAndCustomerIdAndNotOrdered(productId, customerId);
+        if (orderLineService.existByProductIdAndCustomerId(productId, customerId)) {
+            OrderLine orderLineSearched = getOrderLineByProductIdAndCustomerId(productId, customerId);
             orderLine.setId(orderLineSearched.getId());
             orderLine.setQuantity(orderLine.getQuantity() + orderLineSearched.getQuantity());
             return orderLineService.update(orderLine);
@@ -46,15 +44,15 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<OrderLine> getCart(Integer customerid) {
-        return getOrderLinesByCustomerIdAndNotOrdered(customerid).stream().toList();
+        return getOrderLinesByCustomerId(customerid).stream().toList();
     }
 
     @Override
     public OrderLine updateCartProduct(Integer productId, Integer quantity, Integer customerId) throws OrderLineNotFoundException {
-        if (!orderLineService.existByProductIdAndCustomerIdAndNotOrdered(productId, customerId)) {
+        if (!orderLineService.existByProductIdAndCustomerId(productId, customerId)) {
             throw new OrderLineNotFoundException(String.format("Order line not found by product id %s, can't update qauntity %s", productId, quantity));
         }
-        OrderLine orderLine = getOrderLineByProductIdAndCustomerIdAndNotOrdered(productId, customerId);
+        OrderLine orderLine = getOrderLineByProductIdAndCustomerId(productId, customerId);
         orderLine.setQuantity(quantity);
         return orderLineService.update(orderLine);
     }
@@ -62,10 +60,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeCartProduct(Integer productId, Integer customerId) throws OrderLineNotFoundException {
         try {
-            if (!orderLineService.existByProductIdAndCustomerIdAndNotOrdered(productId, customerId)) {
+            if (!orderLineService.existByProductIdAndCustomerId(productId, customerId)) {
                 throw new OrderLineNotFoundException(String.format("Order line not found by product id %s.", productId));
             }
-            Integer orderLineId = getOrderLineByProductIdAndCustomerIdAndNotOrdered(productId, customerId).getId();
+            Integer orderLineId = getOrderLineByProductIdAndCustomerId(productId, customerId).getId();
             orderLineService.delete(orderLineId);
         } catch (OrderLineNotFoundException e) {
             System.err.println(e.getMessage());
@@ -74,7 +72,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void clearCart(Integer customerId) {
-        Set<OrderLine> orderLineList = getOrderLinesByCustomerIdAndNotOrdered(customerId);
+        Set<OrderLine> orderLineList = getOrderLinesByCustomerId(customerId);
         for (OrderLine orderLine : orderLineList) {
             removeCartProduct(orderLine.getProduct().getId(), customerId);
         }
@@ -82,7 +80,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Order placeOrder(Payment payment, Integer customerId) throws InsufficientStockException, EmptyCartException {
-        Set<OrderLine> orderLineSet = getOrderLinesByCustomerIdAndNotOrdered(customerId);
+        Set<OrderLine> orderLineSet = getOrderLinesByCustomerId(customerId);
         if (!orderLineSet.isEmpty()) {
             orderLineSet.forEach(orderLine -> {
                 if (!productService.quantityInSotckAvaliable(orderLine.getProduct().getId(), orderLine.getQuantity())) {
@@ -116,15 +114,12 @@ public class CartServiceImpl implements CartService {
         else return orderLine;
     }
 
-    private Set<OrderLine> getOrderLinesByCustomerIdAndNotOrdered(Integer customerId) {
-        return orderLineService.getAll().stream().filter(orderLine ->
-                        orderLine.getOrdered().equals(false) && orderLine.getCustomerId().equals(customerId))
+    private Set<OrderLine> getOrderLinesByCustomerId(Integer customerId) {
+        return orderLineService.getAll().stream().filter(orderLine -> orderLine.getCustomerId().equals(customerId))
                 .collect(Collectors.toSet());
     }
 
-    private OrderLine getOrderLineByProductIdAndCustomerIdAndNotOrdered(Integer productId, Integer customerId) throws OrderLineNotFoundException {
-        return getOrderLinesByCustomerIdAndNotOrdered(customerId).stream()
-                .filter(ordLn -> Objects.equals(ordLn.getProduct().getId(), productId))
-                .findFirst().orElseThrow(() -> new OrderLineNotFoundException("Product not registered in cart"));
+    private OrderLine getOrderLineByProductIdAndCustomerId(Integer productId, Integer customerId) throws OrderLineNotFoundException {
+        return orderLineService.findByProductIdAndCustomerId(productId, customerId);
     }
 }

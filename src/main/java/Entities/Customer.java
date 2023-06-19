@@ -1,14 +1,13 @@
 package Entities;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Customer {
 
     private Integer id;
-    private String name;
-    private LocalDate birthDate;
-    private String document;
+    private final String name;
+    private final LocalDate birthDate;
+    private final String document;
 
 
     public Customer(String name, LocalDate birthDate, String document) {
@@ -23,7 +22,6 @@ public class Customer {
         this.birthDate = birthDate;
         this.document = document;
     }
-
     public Integer getId() {
         return id;
     }
@@ -32,25 +30,14 @@ public class Customer {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public LocalDate getBirthDate() {
         return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
     }
 
     public String getDocument() {
         return document;
     }
 
-    public void setDocument(String document) {
-        this.document = document;
-    }
 
     @Override
     public String toString() {
