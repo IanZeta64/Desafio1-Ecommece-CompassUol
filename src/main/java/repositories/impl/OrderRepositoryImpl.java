@@ -2,7 +2,7 @@ package repositories.impl;
 import Entities.Order;
 import Entities.OrderLine;
 import Entities.Product;
-import Enums.Payment;
+import enums.Payment;
 import config.DatabaseConfig;
 import repositories.OrderRepository;
 import java.math.BigDecimal;

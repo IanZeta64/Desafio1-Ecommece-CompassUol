@@ -1,6 +1,6 @@
 package repositories.impl;
 import Entities.Employee;
-import Enums.Role;
+import enums.Role;
 import config.DatabaseConfig;
 import repositories.EmployeeRepository;
 import java.sql.*;

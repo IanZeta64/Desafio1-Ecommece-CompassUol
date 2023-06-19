@@ -1,5 +1,4 @@
-package controller;
-import Entities.Product;
+package controllers;
 
 public interface ProductController extends GenericController {
    void searchByNameContainsString();
