@@ -104,7 +104,7 @@ The current project has added Maven to facilitate the database connection. If yo
 
 ## Entity Relationship Model (ERM):
 
-![Entity Relationship Model - Ecommerce](MER/ERM-challenge-1-compass---ecommerce.png)
+![Entity Relationship Model - Ecommerce](ERM/ERM-challenge-1-compass---ecommerce.png)
 
 
 
