@@ -51,7 +51,7 @@ The project has several folders for better code organization. I will briefly des
 - Great! You have imported the server responsible for storing application data, including the 'Ecommerce' database. 
 - You can run the application without any saved data, but you will only be able to register new items if an employee with the role 'MANAGER' is already registered in the database. 
 - Only then can you access the employee menu to add products, customers, employees, and allow these customers to use the shopping menu.
-- *****```If you choose not to import the data, you can execute the following query in PostgreSQL to create an employee with the name 'ADMIN', register 'ADMIN', and role 'MANAGER': INSERT INTO employees (name, register, role) VALUES ('ADMIN', 'ADMIN', 'MANAGER'); ``` *****
+- *****```If you choose not to import the data, you can execute the following query in PostgreSQL to create an employee with the name 'ADMIN', register 'ADMIN', and role 'MANAGER': INSERT INTO employees (name, register, role) VALUES ('ADMIN', 'ADMIN', 'MANAGER'); ```*****
 
 *If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=rHjDW-_Et5g*
 
