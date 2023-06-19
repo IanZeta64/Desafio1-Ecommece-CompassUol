@@ -7,7 +7,7 @@ This project aims to simulate a product registration and shopping cart system fo
 
 The program connects to a PostgreSQL database using JDBC and has 5 tables: customers, employees, products, order_lines, and orders. The project offers CRUD functionality for products, customers, and employees, as well as the ability to add products to the shopping cart, view the cart, place an order, and calculate the final value.
 
-As a bonus, the program includes authentication for registered customers, ensuring that their shopping cart is always available, even when closing the application and returning later. It is also possible to authenticate as an employee, with manager and salesperson permissions. Only the manager can perform CRUD operations with employees.
+As a bonus, the program includes authentication for registered customers, ensuring that their shopping cart is always available even when closing the application or switching customer logins. It is also possible to authenticate as an employee, with manager and salesperson permissions. Only the manager can perform CRUD operations with employees.
 
 
 ## Project Structure:
@@ -60,16 +60,54 @@ The project has several folders for better code organization. I will briefly des
 - Right-click on it and select 'Restore' from the expanded options.
 - In the 'Format' section, select 'Custom or tar'.
 - In the 'Filename' part, click on the folder icon on the left, browse to the DB folder in the project's root directory, open it, select the 'backup_database_ecommerce' file, and click 'Open'.
--  If you can't see the file, at the bottom right of the file selection box, change the option from "Custom files" to "All files".
+- If you can't see the file, at the bottom right of the file selection box, change the option from "Custom files" to "All files".
 - Now click 'Restore' and wait for it to finish.
 - After that, you should be able to view some data in the table. This data will be used for the program to function correctly.
 *If you encounter any difficulties, you can watch this video tutorial for assistance -> https://www.youtube.com/watch?v=vdd66leSDa4*
 
 *Please verify if all the steps have been followed correctly. If none of the alternatives solve the issue, try contacting via email: ianpf7@gmail.com*
 
+### Running Java application:
+- Install Java 18 or higher on your machine for the application to work.
+- Install an IDE capable of running Java code in version 18 or higher, such as IntelliJ or Eclipse.
+- Open the project in your preferred IDE and navigate to the src directory. Inside the src directory, go to the main directory, and then open the java directory.
+- Here you should be able to see the project structure mentioned above.
+- Expand the application package and click on the class inside it named Application.
+- Inside this class, there is a main method that can run the entire application in the console.
+- Click "Run".
+- Now we will run the console application.
+
+### Console:
+- In the console, it will ask you to customize the menu style. Choose a character, type it, and press enter.
+- After that, it will welcome you and you should choose between the customer menu, employee menu, or to exit the application.
+- In the customer and employee menu options, authentication is required. Consult the database with the provided backups to access the menus.
+- *****```To retrieve registered employees, execute the query in pg Admin: SELECT * FROM employees, and to retrieve customers, execute the query in pg Admin SELECT * FROM customers. These commands should provide you with tables of employees and customers, respectively.```*****
+- After that, use the retrieved information to authenticate and test the program.
+
+### Employee Menu:
+- With employee authentication, you will be able to perform CRUD operations on products, customers, and even other employees if the employee has manager permission.
+
+### Customer Menu:
+- With customer authentication, you will be able to perform cart operations such as adding products, listing products, updating products, removing products, searching for products by name, clearing the cart, finalizing the order, searching for order lines by ID, searching for orders by ID, and viewing all orders. If not authenticated, you can register normally to continue to the menu and proceed with purchases.
+
+## Interesting features of the program:
+
+- It can authenticate registered customers and separate products in the cart for each individual customer, even if they don't finalize the order and close the application or switch logins. This is possible due to the OrderLine entity stored in the database, allowing this flexibility in the code.
+- It can authenticate employees to perform CRUD operations and differentiate based on the employee's position to allow or disallow the CRUD operation on employees.
+- It supports pagination for listed items, and you can customize the number of items displayed per page in the code. By default, it is set to 5 for customers, employees, and products, 10 for order lines, and 2 for orders. The program recognizes the number of pages required, whether it's the first page, middle pages, or the last page.
+- It has personalized exception handling specific to the application, providing better reporting for the application manager and information for the user in case of any execution issues.
+
+
+
+
+
 [Track the project's progress](https://trello.com/b/DeG0nY6c/projeto-ecommerce-compass-uol)
 
 [Challenge description](https://legend-nightshade-bd0.notion.site/DESAFIO-1-266f087c9cfd4763b8470cfdd250f077)
+
+---
+---
+---
 
 # DESAFIO 1
 
