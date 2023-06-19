@@ -5,6 +5,8 @@
 
 This project aims to simulate a product registration and shopping cart system for an e-commerce platform, without using the Spring Framework. Despite not utilizing this tool, we strive to achieve a similar model to Spring MVC, with layers for repositories, services, controllers, and an additional layer for the console interface. The goal is to follow good architecture practices, clean code principles, and adherence to the S.O.L.I.D. principles.
 
+The project aimed to experiment and apply the main concepts of OOP, such as inheritance, polymorphism, encapsulation, and abstraction, in addition to utilizing Java features like Stream.
+
 The program connects to a PostgreSQL database using JDBC and has 5 tables: customers, employees, products, order_lines, and orders. The project offers CRUD functionality for products, customers, and employees, as well as the ability to add products to the shopping cart, view the cart, place an order, and calculate the final value.
 
 As a bonus, the program includes authentication for registered customers, ensuring that their shopping cart is always available even when closing the application or switching customer logins. It is also possible to authenticate as an employee, with manager and salesperson permissions. Only the manager can perform CRUD operations with employees.
@@ -96,6 +98,7 @@ The project has several folders for better code organization. I will briefly des
 - It can authenticate employees to perform CRUD operations and differentiate based on the employee's position to allow or disallow the CRUD operation on employees.
 - It supports pagination for listed items, and you can customize the number of items displayed per page in the code. By default, it is set to 5 for customers, employees, and products, 10 for order lines, and 2 for orders. The program recognizes the number of pages required, whether it's the first page, middle pages, or the last page.
 - It has personalized exception handling specific to the application, providing better reporting for the application manager and information for the user in case of any execution issues.
+- Flow of the menu without using loop commands, only using recursion.
 
 
 
